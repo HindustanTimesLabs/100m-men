@@ -84,9 +84,16 @@ body {
     @media (max-width: 850px) {
       body .intro-text {
         padding-top: 0; } }
+  body .stopwatch.inactive {
+    opacity: 0; }
   body .stopwatch {
+    -moz-transition: all .2s linear;
+    -webkit-transition: all .2s linear;
+    -o-transition: all .2s linear;
+    transition: all .2s linear;
+    top: 180px;
     position: fixed;
-    right: 40px;
+    right: 0;
     text-align: center;
     padding: 1em 2em;
     background-color: rgba(255, 255, 255, 0.8);
@@ -95,6 +102,11 @@ body {
     opacity: 1; }
     body .stopwatch .time {
       font-size: 2em; }
+    @media (max-width: 600px) {
+      body .stopwatch {
+        right: 0;
+        padding: 0.5em 1em;
+        font-size: 0.9em; } }
   body .legend {
     text-align: center;
     margin-top: -30px; }
@@ -128,6 +140,15 @@ body {
           margin-bottom: 0.5em; } }
   body .x.axis .tick {
     display: none; }
+  body .label-text {
+    font-weight: 500;
+    font-size: 1.1em; }
+    @media (max-width: 800px) {
+      body .label-text {
+        font-size: 0.9em; } }
+  @media (max-width: 600px) {
+    body .difference .label-text {
+      font-size: 0.8em; } }
   body .y.axis path.domain {
     display: none; }
   body .y.axis .tick {
@@ -190,9 +211,13 @@ body {
       border-radius: 5px;
       text-align: center;
       width: 80px; }
+      @media (max-width: 500px) {
+        body .stepper-container .progress-button {
+          font-size: 0.9em;
+          width: 60px; } }
     body .stepper-container .progress-button:hover {
       border-color: black;
-      background-color: white;
+      background-color: rgba(255, 255, 255, 0);
       color: black;
       cursor: pointer; }
     body .stepper-container .progress-active.progress-step {
@@ -200,10 +225,20 @@ body {
     @media (max-width: 800px) {
       body .stepper-container {
         max-width: 500px;
-        left: 10px;
         top: 0;
         width: 80%;
-        min-height: 180px;
-        z-index: -1; } }
+        left: 0;
+        min-height: 140px;
+        z-index: -1;
+        width: 90%;
+        padding: 0.5em 1em; } }
+    @media (max-width: 600px) {
+      body .stepper-container {
+        -webkit-box-shadow: -1px 3px 20px -5px rgba(0, 0, 0, 0.68);
+        -moz-box-shadow: -1px 3px 20px -5px rgba(0, 0, 0, 0.68);
+        box-shadow: -1px 3px 20px -5px rgba(0, 0, 0, 0.68); } }
+    @media (max-width: 500px) {
+      body .stepper-container .text {
+        font-size: 0.9em; } }
 
 /*# sourceMappingURL=styles.css.map*/

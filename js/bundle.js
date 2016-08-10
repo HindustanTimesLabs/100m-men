@@ -67,8 +67,6 @@
 	                .duration(50)
 	        }
 	    }
-	    
-	
 	}).scroll();
 	
 	var steps = [
@@ -229,6 +227,7 @@
 	
 	    // what happens when you click on the start button
 	    $('.button').on("click",function(){
+	        $('.stopwatch').removeClass('inactive')
 	        starttime = Date.now()
 	        setTimeout(scrollAnimator, 1000);
 	        var timer = setInterval(stopWatchTimer, 0.5);
@@ -264,16 +263,16 @@
 	        var labelLineR = arrowright.append("line")
 	            .attr("x1", (x("Jamaica") + x.bandwidth()))
 	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("Jamaica") + 50)
+	            .attr("x2", x("Jamaica") + 40)
 	            .attr("y2", box.height * 0.75)
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
 	        var rightR = arrowright.append("line")
 	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("Jamaica") + 50)
+	            .attr("x1", x("Jamaica") + 40)
 	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("Jamaica") + 50 - 8)
+	            .attr("x2", x("Jamaica") + 40 - 8)
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
@@ -286,9 +285,8 @@
 	            .attr("stroke", "#2D2D2D");
 	
 	         var rightArrowText = arrowright.append("text")
-	                                .attr("class","right-arrow-text")
+	                                .attr("class","label-text right-arrow-text")
 	                                .text("Usain Bolt")
-	                                .style("font-size","1.1em")
 	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
 	    
 	        // fade in the arrow
@@ -365,18 +363,18 @@
 	                            .style("opacity", 0)
 	
 	        var labelLine = arrowleft.append("line")
-	            .attr("x1", x("India")-x.bandwidth())
+	            .attr("x1", x("India"))
 	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("India") - 50)
+	            .attr("x2", x("India") - 40)
 	            .attr("y2", box.height * 0.75)
 	            .attr("stroke-width",1)
 	            .attr("stroke", "#2D2D2D");
 	
 	        var right = arrowleft.append("line")
 	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("India") - 50)
+	            .attr("x1", x("India") - 40)
 	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("India") - 50 + 8)
+	            .attr("x2", x("India") - 40 + 8)
 	            .attr("stroke-width",1)
 	            .attr("stroke", "#2D2D2D");
 	
@@ -389,9 +387,8 @@
 	            .attr("stroke", "#2D2D2D");
 	
 	        var leftArrowtext = arrowleft.append("text")
-	                                .attr("class","left-arrow-text")
+	                                .attr("class","label-text left-arrow-text")
 	                                .text("India")
-	                                .style("font-size","1.1em")
 	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
 	        
 	        // arrow for Jamaica
@@ -403,16 +400,16 @@
 	        var labelLineR = arrowright.append("line")
 	            .attr("x1", (x("Jamaica") + x.bandwidth()))
 	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("Jamaica") + 50)
+	            .attr("x2", x("Jamaica") + 40)
 	            .attr("y2", box.height * 0.75)
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
 	        var rightR = arrowright.append("line")
 	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("Jamaica") + 50)
+	            .attr("x1", x("Jamaica") + 40)
 	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("Jamaica") + 50 - 8)
+	            .attr("x2", x("Jamaica") + 40 - 8)
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
@@ -425,9 +422,8 @@
 	            .attr("stroke", "#2D2D2D");
 	
 	         var rightArrowText = arrowright.append("text")
-	                                .attr("class","right-arrow-text")
+	                                .attr("class","label-text right-arrow-text")
 	                                .text("Jamaica")
-	                                .style("font-size","1.1em")
 	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
 	        
 	        // fade in arrows
@@ -443,9 +439,9 @@
 	            .style('opacity',0)
 	            .append('line')
 	            .attr('class','difference-l')
-	            .attr("x1", (x("India")-(x.bandwidth())))
+	            .attr("x1", (x("India")-(x.bandwidth())*2))
 	            .attr("y1", y(lowerComp.pos_at_max_dist))
-	            .attr("x2", (x("India")-(x.bandwidth())))
+	            .attr("x2", (x("India")-(x.bandwidth())*2))
 	            .attr("y2", y(100))
 	            .style('stroke','black')
 	            .style('stroke-width','1px')
@@ -457,7 +453,7 @@
 	
 	        d3.select('.difference').append('line')
 	            .attr('class','difference-l')
-	            .attr("x1", (x("India")-(x.bandwidth())))
+	            .attr("x1", (x("India")-(x.bandwidth())*2))
 	            .attr("y1", y(_.findWhere(men,{Country:'India'}).pos_at_max_dist))
 	            .attr("x2", (x("India")))
 	            .attr("y2", y(_.findWhere(men,{Country:'India'}).pos_at_max_dist))
@@ -471,7 +467,7 @@
 	
 	        d3.select('.difference').append('line')
 	            .attr('class','difference-l')
-	            .attr("x1", (x("India")-(x.bandwidth())))
+	            .attr("x1", (x("India")-(x.bandwidth())*2))
 	            .attr("y1", y(100))
 	            .attr("x2", (x("India")))
 	            .attr("y2", y(100))
@@ -488,7 +484,8 @@
 	        d3.select('.difference')
 	            .append('text')
 	            .text(diff+"m")
-	            .attr('transform','translate(' + ( x("India")-60) + "," + y(parseFloat(lowerComp.pos_at_max_dist)+parseFloat(diff/2)) +")")
+	            .attr("class","label-text")
+	            .attr('transform','translate(' + ( x("India")-(x.bandwidth()*5)-40) + "," + y(parseFloat(lowerComp.pos_at_max_dist)+parseFloat(diff/2)) +")")
 	        }
 	
 	        
@@ -502,18 +499,7 @@
 	    }
 	
 	    // code for stopwatch
-	
-	   var stopwatch = d3.select('body')
-	            .append('div')
-	            .attr('class','stopwatch')
-	            .attr('style',"top:"+$('.chart-container').position().top+"px;")
-	            
-	    stopwatch.append('div')
-	            .text('Elapsed Time')
-	
-	    stopwatch.append('div')
-	            .attr('class','time')
-	            .text('00.00s')
+	   var stopwatch = d3.select('.stopwatch')
 	
 	    // code to clean time
 	
