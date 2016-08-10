@@ -1,0 +1,209 @@
+body {
+  margin: 0;
+  font-family: "Lato"; }
+  body .headline {
+    color: #3a3a3a;
+    font-family: "Lato";
+    font-weight: 900;
+    font-size: 2.8em;
+    line-height: 1.4em; }
+    @media (max-width: 850px) {
+      body .headline {
+        font-size: 2em; } }
+  body .intro-container {
+    margin-bottom: 6em; }
+    @media (max-width: 850px) {
+      body .intro-container {
+        margin: 3em 0; } }
+  body .dateline, body .byline {
+    font-size: 1.1em; }
+  body .dateline {
+    font-style: italic; }
+  body .head-container.hide-mobile {
+    text-align: left;
+    position: absolute;
+    max-width: 350px;
+    width: 30%;
+    bottom: 100px;
+    left: 30px; }
+    @media (max-width: 850px) {
+      body .head-container.hide-mobile {
+        display: none; } }
+  @media (max-width: 850px) {
+    body .head-container.hide-desktop {
+      display: block;
+      text-align: center;
+      width: 90%;
+      margin: 1em auto 1em auto; } }
+  @media (max-width: 600px) {
+    body .head-container.hide-desktop {
+      margin-top: 0; } }
+  body .lead-container {
+    position: relative; }
+  body .leadimg {
+    width: 100%;
+    height: 700px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    overflow: hidden; }
+    @media (max-width: 1200px) {
+      body .leadimg {
+        background-position: 300%; } }
+    @media (max-width: 1000px) {
+      body .leadimg {
+        background-position: -200%; } }
+    @media (max-width: 850px) {
+      body .leadimg {
+        background-position: left;
+        background-size: 150%;
+        height: 600px; } }
+    @media (max-width: 800px) {
+      body .leadimg {
+        background-position: left;
+        background-size: 150%;
+        height: 550px; } }
+    @media (max-width: 600px) {
+      body .leadimg {
+        height: 420px; } }
+    @media (max-width: 500px) {
+      body .leadimg {
+        height: 380px; } }
+    @media (max-width: 400px) {
+      body .leadimg {
+        height: 300px; } }
+  body .hide-desktop {
+    display: none; }
+  body .intro-text {
+    width: 90%;
+    max-width: 550px;
+    padding-top: 5em;
+    text-align: center;
+    margin: 1em auto 2em auto;
+    font-size: 1.1em;
+    line-height: 1.4em; }
+    @media (max-width: 850px) {
+      body .intro-text {
+        padding-top: 0; } }
+  body .stopwatch {
+    position: fixed;
+    right: 40px;
+    text-align: center;
+    padding: 1em 2em;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #3a3a3a;
+    border-radius: 5px;
+    opacity: 1; }
+    body .stopwatch .time {
+      font-size: 2em; }
+  body .legend {
+    text-align: center;
+    margin-top: -30px; }
+    body .legend .key {
+      display: inline-block;
+      margin-right: 4em; }
+      body .legend .key p {
+        display: inline-block;
+        vertical-align: middle; }
+      body .legend .key .legend-box {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin-right: 0.5em;
+        vertical-align: middle; }
+        @media (max-width: 900px) {
+          body .legend .key .legend-box {
+            width: 12px;
+            height: 12px; } }
+    body .legend .key:last-child {
+      margin-right: 0; }
+    @media (max-width: 900px) {
+      body .legend {
+        margin-top: -50px;
+        text-align: left;
+        padding-left: 1em;
+        font-size: 0.8em; }
+        body .legend .key {
+          margin: -10px 1em 0 0;
+          margin-right: 1em;
+          margin-bottom: 0.5em; } }
+  body .x.axis .tick {
+    display: none; }
+  body .y.axis path.domain {
+    display: none; }
+  body .y.axis .tick {
+    font-size: 1.4em; }
+    body .y.axis .tick text {
+      fill: #C7C7C7; }
+    body .y.axis .tick line {
+      stroke: #EDEDED !important; }
+  body .finish-line-text {
+    fill: #C7C7C7;
+    font-size: 1.5em; }
+  body .button {
+    border: 2px solid #3a3a3a;
+    padding: 0.7em 0.5em;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    font-size: 1.2em;
+    background-color: #3a3a3a;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer; }
+  body .button:hover {
+    color: #3a3a3a;
+    background-color: white; }
+  body .axis path,
+  body .axis line {
+    fill: none;
+    stroke: #C7C7C7;
+    stroke-width: 2;
+    shape-rendering: crispEdges; }
+  body line.x.axis, body .x.axis path, body line.finish-line.axis {
+    stroke-width: 2;
+    stroke: #C7C7C7; }
+  body .stepper-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 1em;
+    position: fixed;
+    top: 10px;
+    left: 70px;
+    width: 350px;
+    border-radius: 5px;
+    opacity: 0; }
+    body .stepper-container .progress-step {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: solid 1px #3a3a3a;
+      margin-right: 0.8em; }
+    body .stepper-container .text {
+      margin: 1em 0;
+      line-height: 1.8em; }
+    body .stepper-container .progress-button {
+      background-color: black;
+      color: white;
+      border: solid 1px black;
+      padding: 0.3em;
+      border-radius: 5px;
+      text-align: center;
+      width: 80px; }
+    body .stepper-container .progress-button:hover {
+      border-color: black;
+      background-color: white;
+      color: black;
+      cursor: pointer; }
+    body .stepper-container .progress-active.progress-step {
+      background-color: #3a3a3a; }
+    @media (max-width: 800px) {
+      body .stepper-container {
+        max-width: 500px;
+        left: 10px;
+        top: 0;
+        width: 80%;
+        min-height: 180px;
+        z-index: -1; } }
+
+/*# sourceMappingURL=styles.css.map*/
