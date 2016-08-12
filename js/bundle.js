@@ -74,31 +74,31 @@
 	        'highlight':'Jamaica',
 	        'arrow':'Jamaica',
 	        'text':'Usain Bolt',
-	        'narrative':'<span class = "med">Usain Bolt is still the fastest human being. Ever. His record: <b>9.58 seconds</b> in 2009.</span>'
+	        'narrative':'Usain Bolt is still the fastest human being. Ever. His record: <b>9.58 seconds</b> in 2009.'
 	    },
 	    {
-	        'narrative':'When Bolt crosses the finish line, the second fastest man - America’s <b>Tyson Gay - is more than a meter behind</b>. That’s about the length of a cricket bat.'
+	        'narrative':' When Bolt crosses the finish line, the second fastest man - America’s Tyson Gay - is <b>more than a meter</b> behind. That’s about the length of a cricket bat.'
 	    },
 	    {
-	        'narrative':'<span class ="small">India\'s Amiya Kumar Mallick is farther behind: 6.63 meters. But his record - 10.26 seconds - is <b>six-tenths of a second behind</b> Bolt. That’s how long it takes to blink twice.</span>'
+	        'narrative':'India\'s Amiya Kumar Mallick is <b>6.63 meters</b> behind. At <b>10.26 seconds</b>, he is <b>six-tenths of a second</b> slower than Bolt. That’s how long it takes to blink twice.'
 	    },
 	    {
-	        'narrative':'<span class ="small">Mallick’s record was good enough to win him a gold medal at the Melbourne Olympics in 1956. Today, at least <b>100 countries</b> have a faster national record than <span class = "india">India</span>.</span> '
+	        'narrative':'Mallick’s record was good enough to win him a gold at the Melbourne Olympics in 1956. Today, at least <b>100</b> countries have a faster national record than <span class = "india">India</span>. '
 	    },
 	    {
-	        'narrative':'<span class = "big"><b>112 countries</b> are slower.</big>'
+	        'narrative':'<b>112</b> countries are slower.'
 	    },
 	    {
-	        'narrative':'<span class = "big">In Asia, <b><span class = "india">India</span> is ranked 16.</b> It’s ahead of 32 countries.</big>'
+	        'narrative':'In Asia, <span class = "india">India</span> is ranked <b>16</b>. It’s ahead of 32 countries.'
 	    },
 	    {
-	        'narrative':'<span class = "med">In South Asia, <b><span class = "india">India</span> is the fastest.</b> Sri Lanka comes close, finishing just 0.02 seconds later.</span>'
+	        'narrative':'<span class = "med">In South Asia, <b><span class = "india">India</span> is the fastest.</b> Sri Lanka is right behind, just <b>0.02 seconds</b> too late.</span>'
 	    },
 	    {
-	        'narrative':'<span class ="small">Bhutan at 12.15 seconds is the slowest country in the world. That’s <b>two-and-half seconds behind Bolt.</b> That’s probably how long it takes to say, “Wow! Usain Bolt is really fast.”</span>'
+	        'narrative':'At <b>12.15 seconds</b>, Bhutan is the <b>slowest.</b>'
 	    },
 	    {
-	        'narrative':'Pick any two countries and watch their fastest runners compete. '
+	        'narrative':'That gap - between the slowest sprinter and the fastest - is a matter of <b>two-and-half seconds.</b>'
 	    }
 	]
 	
@@ -257,9 +257,6 @@
 	            .delay((mintime*1000)+1000)
 	            .style('opacity',0)
 	            .duration(1000)
-	
-	        
-	
 	    })
 	
 	    chart.append('line')
@@ -328,7 +325,6 @@
 	    })
 	
 	    // code for round function
-	
 	    function round(value, precision) {
 	        var multiplier = Math.pow(10, precision || 0);
 	        return Math.round(value * multiplier) / multiplier;
@@ -358,9 +354,8 @@
 	    // Slide 1
 	    function firstSlide(timedelay){
 	        $('.a-step').remove()
-	        
+	        hideRefLine()
 	        // arrow for Jamaica
-	
 	        var arrowright = chart.append("g")
 	                            .attr('class','a-step arrowright arrow')
 	                            .attr('id','step1-arrow')
@@ -401,6 +396,10 @@
 	            .delay(timedelay)
 	            .style("opacity",1)
 	            .duration(1000)
+	        
+	        if (timedelay==0){
+	            resetOpacity()
+	        }
 	
 	        // highlight Usain Bolt
 	        d3.selectAll('.bar')
@@ -412,6 +411,8 @@
 	
 	    // Slide 2
 	    function secondSlide(){
+	        resetOpacity()
+	        hideRefLine()
 	        $('.a-step, .difference').remove()
 	
 	        // arrow for Jamaica
@@ -502,9 +503,9 @@
 	
 	    // Slide 3
 	    function thirdSlide(){
-	        d3.selectAll('.arrow,.refline')
-	            // .transition()
-	            // .style('opacity',0)
+	        resetOpacity()
+	        hideRefLine()
+	        d3.selectAll('.arrow')
 	            .remove()
 	        
 	        // highlight Anil Kumar and Osain Bolt
@@ -650,25 +651,23 @@
 	
 	    function fourthSlide(){
 	        // highlight fast people
-	        
-	
+	        resetOpacity()
+	        showRefLine()
 	        d3.selectAll('.arrow, .difference')
-	            // .transition()
-	            // .style('opacity',0)
 	            .remove()
 	
 	        d3.selectAll('.bar')
 	            .transition()
-	            .style("fill",function(e){if (parseFloat(e.pos_at_max_dist)>=parseFloat(India.pos_at_max_dist)){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
-	            // .style("opacity",function(e){
-	            //     if (parseFloat(e.pos_at_max_dist)>parseFloat(India.pos_at_max_dist)){
-	            //         return 0.4
-	            //     } else if (parseFloat(e.pos_at_max_dist)==parseFloat(India.pos_at_max_dist)) {
-	            //         return 1
-	            //     } else {
-	            //         return 1
-	            //     }
-	            // })
+	            .style("fill",function(e){if (parseFloat(e.pos_at_max_dist)>=parseFloat(India.pos_at_max_dist)){return colorRange(e['Continent'])} else {return "#F7F7F7"}})
+	            .style("opacity",function(e){
+	                if (parseFloat(e.pos_at_max_dist)>parseFloat(India.pos_at_max_dist)){
+	                    return 0.4
+	                } else if (parseFloat(e.pos_at_max_dist)==parseFloat(India.pos_at_max_dist)) {
+	                    return 1
+	                } else {
+	                    return 1
+	                }
+	            })
 	            .duration(1000)
 	
 	        var arrowleft = chart.append("g")
@@ -726,10 +725,10 @@
 	            .attr("stroke", "#2D2D2D");
 	
 	        arrowleft.append("text")
-	                                .attr("class","label-text left-arrow-text shadow")
-	                                .text("India")
-	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
-	                                .attr('st')
+	                .attr("class","label-text left-arrow-text shadow")
+	                .text("India")
+	                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	                .attr('st')
 	
 	        var leftArrowtext = arrowleft.append("text")
 	                                .attr("class","label-text left-arrow-text")
@@ -742,24 +741,33 @@
 	    // Slide 5
 	
 	    function fifthSlide(){
+	        resetOpacity()
+	        showRefLine()
 	        d3.selectAll('.bar')
 	            .transition()
-	            .style("fill",function(e){if (parseFloat(e.pos_at_max_dist)<=parseFloat(India.pos_at_max_dist)){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
-	            // .style("opacity",function(e){
-	            //     if (parseFloat(e.pos_at_max_dist)<parseFloat(India.pos_at_max_dist)){
-	            //         return 0.4
-	            //     } else if (parseFloat(e.pos_at_max_dist)==parseFloat(India.pos_at_max_dist)) {
-	            //         return 1
-	            //     } else {
-	            //         return 1
-	            //     }
-	            // })
+	            .style("fill",function(e){
+	                if (parseFloat(e.pos_at_max_dist)<=parseFloat(India.pos_at_max_dist)){
+	                    return colorRange(e['Continent'])
+	                } else {
+	                    return "#F7F7F7"}
+	                })
+	            .style("opacity",function(e){
+	                if ( parseFloat(e.pos_at_max_dist) < parseFloat(India.pos_at_max_dist) ){
+	                    return 0.4
+	                } else if (parseFloat(e.pos_at_max_dist)==parseFloat(India.pos_at_max_dist)) {
+	                    return 1
+	                } else {
+	                    return 1
+	                }
+	            })
 	            .duration(1000)
 	    }
 	
 	    // Slide 6
 	
 	    function sixthSlide(){
+	        resetOpacity()
+	        $('.arrow').remove()
 	        d3.selectAll('.bar')
 	            .transition()
 	            .style("fill",function(e){if (e.Continent=="Asia"){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
@@ -769,6 +777,7 @@
 	
 	    // Slide 7
 	    function seventhSlide(){
+	        resetOpacity()
 	        d3.selectAll('.bar')
 	            .transition()
 	            .style("fill",function(e){
@@ -784,13 +793,20 @@
 	    // Slide 8
 	
 	    function eighthSlide(){
-	         $("html, body").animate(
-	            { scrollTop: ($('body').scrollTop()-80)}
-	            , 1000, 'swing'
-	        );
+	        $('.arrow').remove()
+	        resetOpacity()
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style('fill',function(e){
+	                if (e.Country=='Bhutan'){
+	                    return colorRange(e['Continent'])
+	                } else {
+	                    return '#E5E5E5'
+	                }
+	            })
+	            .duration(1000)
 	         // arrow for Bhutan
-	
-	         var bhutan = _.findWhere(men,{Country:'Bhutan'})
+	        var bhutan = _.findWhere(men,{Country:'Bhutan'})
 	        var arrowright = chart.append("g")
 	                            .attr('class','arrowright arrow a-step')
 	                            .style("opacity", 0)
@@ -831,23 +847,172 @@
 	    // Slide 9
 	
 	    function ninthSlide(){
-	        // d3.select('.stepper-container .text')
-	        //     .append('select')
-	        //     .attr('class','country-selector')
+	        $('.arrow').remove()
+	        resetOpacity()
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style('fill',function(e){
+	                if (e.Country=='Bhutan' || e.Country=='Jamaica'){
+	                    return colorRange(e['Continent'])
+	                } else {
+	                    return '#E5E5E5'
+	                }
+	            })
+	            .duration(1000)
 	
-	        // $('country-selector').append('<option>'+'some'+'</option>')
+	         // arrow for Bhutan
+	         var bhutan = _.findWhere(men,{Country:'Bhutan'})
+	        var arrowright = chart.append("g")
+	                            .attr('class','arrowright arrow a-step')
+	                            .style("opacity", 0)
+	
+	        var labelLineR = arrowright.append("line")
+	            .attr("x1", (x("Bhutan") + x.bandwidth()))
+	            .attr("y1", y(bhutan.pos_at_max_dist-1))
+	            .attr("x2", x("Bhutan") + arrowlength)
+	            .attr("y2", y(bhutan.pos_at_max_dist-1))
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var rightR = arrowright.append("line")
+	            .attr("y1", y(bhutan.pos_at_max_dist-1))
+	            .attr("x1", x("Bhutan") + arrowlength)
+	            .attr("y2", y(bhutan.pos_at_max_dist-1) + 5)
+	            .attr("x2", x("Bhutan") +( arrowlength - 8))
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftR = arrowright.append("line")
+	            .attr("x1", rightR.attr("x1"))
+	            .attr("y1", rightR.attr("y1"))
+	            .attr("x2", rightR.attr("x2"))
+	            .attr("y2", rightR.attr("y2") - 10)
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	         var rightArrowText = arrowright.append("text")
+	                                .attr("class","label-text right-arrow-text")
+	                                .text("Bhutan")
+	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
+	        
+	        var arrowleft = chart.append("g")
+	                        .attr('class','arrowleft arrow a-step')
+	
+	        var labelLine = arrowleft.append("line")
+	            .attr("x1", x("Jamaica"))
+	            .attr("y1", box.height * 0.8)
+	            .attr("x2", x("Jamaica") - arrowlength+x.bandwidth())
+	            .attr("y2", box.height * 0.8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var right = arrowleft.append("line")
+	            .attr("y1", box.height * 0.8)
+	            .attr("x1", x("Jamaica") - arrowlength+x.bandwidth())
+	            .attr("y2", box.height * 0.8 + 5)
+	            .attr("x2", x("Jamaica") - arrowlength+x.bandwidth() + 8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var left = arrowleft.append("line")
+	            .attr("x1", right.attr("x1"))
+	            .attr("y1", right.attr("y1"))
+	            .attr("x2", right.attr("x2"))
+	            .attr("y2", right.attr("y2")-10)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        arrowleft.append("text")
+	                .attr("class","label-text left-arrow-text shadow")
+	                .text("Jamaica")
+	                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	                .attr('st')
+	
+	        var leftArrowtext = arrowleft.append("text")
+	                                .attr("class","label-text left-arrow-text")
+	                                .text("Jamaica")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	                                .attr('st')  
+	
+	        arrowright.transition()
+	                    .style('opacity',1)
+	                    .duration(1000)
+	
+	
+	        // highlight difference
+	
+	        var difference = chart.append('g')
+	            .attr('class','difference')
+	            .style('opacity',0)
+	            .append('line')
+	            .attr('class','difference-l')
+	            .attr("x1", (x("Bhutan")-(x.bandwidth())*2))
+	            .attr("y1", y(bhutan.pos_at_max_dist))
+	            .attr("x2", (x("Bhutan")-(x.bandwidth())*2))
+	            .attr("y2", y(100))
+	            .style('stroke','black')
+	            .style('stroke-width','1px')
+	
+	        d3.select('.difference').transition()
+	            .delay(200)
+	            .style("opacity",1)
+	            .duration(1000)
+	
+	        d3.select('.difference').append('line')
+	            .attr('class','difference-l')
+	            .attr("x1", (x("Bhutan")-(x.bandwidth())*2))
+	            .attr("y1", y(bhutan.pos_at_max_dist))
+	            .attr("x2", (x("Bhutan")))
+	            .attr("y2", y(bhutan.pos_at_max_dist))
+	            .style('stroke','black')
+	            .style('stroke-width','1px')
+	            .style('opacity',0)
+	            .transition()
+	            .delay(200)
+	            .style("opacity",1)
+	            .duration(1000)
+	
+	        d3.select('.difference').append('line')
+	            .attr('class','difference-l')
+	            .attr("x1", (x("Bhutan")-(x.bandwidth())*2))
+	            .attr("y1", y(100))
+	            .attr("x2", (x("Bhutan")))
+	            .attr("y2", y(100))
+	            .style('stroke','black')
+	            .style('stroke-width','1px')
+	            .style('opacity',0)
+	            .transition()
+	            .delay(200)
+	            .style("opacity",1)
+	            .duration(1000)
+	
+	        var diff = round((100 - bhutan.pos_at_max_dist),2)
+	
+	        d3.select('.difference')
+	            .append('text')
+	            .text(diff+"m")
+	            .attr("class","label-text")
+	            .attr('transform','translate(' + ( x("Bhutan")-(x.bandwidth()*7)-40) + "," + y(parseFloat(bhutan.pos_at_max_dist)+parseFloat(diff/2)) +")")
+	
 	    }
 	
 	
 	    // MISC
 	
 	    function appendRefLine(val){
-	        var refline = chart.append('line')
+	        var refline = chart.append('g')
+	
+	        refline.append('line')
 	                        .attr('class', 'refline')
 	                        .attr("y1", y(val))
 	                        .attr("x1", 0)
 	                        .attr("y2", y(val))
 	                        .attr("x2", box.width)
+	
+	        refline.append('text')
+	                .text('India')
+	                .attr('transform','translate('+ (box.width-80) +","+ y(val) +")")
+	
 	    }
 	
 	    function changeSlide(pos){
@@ -890,6 +1055,27 @@
 	        
 	        $('.steps .progress-step').removeClass('progress-active')
 	        $('#step'+pos).addClass('progress-active')
+	    }
+	
+	    function resetOpacity(){
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style('opacity',1)
+	            .duration(1000)
+	    }
+	
+	    function hideRefLine(){
+	        d3.select('.refline')
+	            .transition()
+	            .style('opacity',0)
+	            .duration(1000)
+	    }
+	
+	    function showRefLine(){
+	        d3.select('.refline')
+	            .transition()
+	            .style('opacity',1)
+	            .duration(1000)
 	    }
 	})
 
