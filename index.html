@@ -4,28 +4,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width">
-    <link href="https://fonts.googleapis.com/css?family=Lato:200,300,300i,400,500,900|Prata" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:200,300,300i,400,500,900" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <title>Every 100m national record against each other. Watch the men.</title>
 </head>
 <body>
+    <div class = "nav">
+        <a href="http://www.hindustantimes.com"><img class = 'mobile nav-logo' src = "img/logo-mobile.png"><img class = 'desktop nav-logo' src = "img/logo.png"></a>  
+        <div class = 'right-container'>
+            <i class="fa fa-facebook social-button" aria-hidden="true"></i>
+            <i class="fa fa-twitter social-button" aria-hidden="true"></i>
+        </div>
+    </div>
     <div class = "lead-container">
         <div class = "head-container hide-mobile">
             <h1 class = "headline hide-mobile">Every 100m national record against each other</h1>
-            <p class = "byline">By XYZ</p>
             <p class = "dateline">August 13th, 2016</p>
         </div>
         <div class = "leadimg" style = "background-image: url('img/leadimg.png')"></div>
     </div>
     <div class = "head-container hide-desktop">
         <h1 class = "headline">Every 100m national record against each other</h1>
-        <p class = "byline">By XYZ</p>
         <p class = "dateline">August 13th, 2016</p>
     </div>
     <div class = "intro-container">
         <div class = "intro-text">
-        We made the national record setter for each country run against each other. If there average speed is taken into account, how far is every other runner at the finish line?<br></br>
-        Find out with our interactive.
+        We plotted every country’s national record in the 100-metre dash, the shortest of the Olympic races. Hit begin to find out where each country’s fastest sprinter is when Usain Bolt - the fastest man ever - reaches the finish line. 
         </div>
         <div class = "button">Begin the race</div>
     </div>
@@ -41,16 +46,22 @@
             
         </div>
         <div class = "text">
-            Usain Bolt’s 2009 record at 9.58s, continues to be the fastest in the world.
+            Usain Bolt is still the fastest human being. Ever. His record: <b>9.58 seconds</b> in 2009.
         </div>
         <div class = "progress">
-            <!-- <div class = "progress-next progress-button" id = "prev">
-                Prev
-            </div> -->
+            <div class = "progress-prev progress-button inactive" id = "prev">
+                Back
+            </div>
             <div class = "progress-next progress-button" id = "next">
                 Next
             </div>
         </div>
+    </div>
+
+    <div class = "credits">
+        Reporting by Gurman Bhatia, Piyush Aggarwal and Anand Katakam. Interactive by Gurman Bhatia. Lead illustration by Anand Katakam.<br>
+        Notes: Visualized above are the national 100m records for 213 countries that have been International Association of Athletics Federations ratified. <br>
+        Data source: International Association of Athletics Federations and various regional athletic  organisations.
     </div>
     
     <script type="text/javascript"src = "js/bundle.js"></script>

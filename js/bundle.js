@@ -74,25 +74,31 @@
 	        'highlight':'Jamaica',
 	        'arrow':'Jamaica',
 	        'text':'Usain Bolt',
-	        'narrative':'Usain Bolt’s 2009 record at 9.58s, continues to be the fastest in the world.'
+	        'narrative':'Usain Bolt is still the fastest human being. Ever. His record: <b>9.58 seconds</b> in 2009.'
 	    },
 	    {
-	        'highlight':'Jamaica, India',
-	        'arrow':'Jamaica, India',
-	        'text':'Usain Bolt',
-	        'narrative':'When Bolt is at the finish line, India\'s Anil Kumar is 6.63m behind.'
+	        'narrative':'When Bolt crosses the finish line, the second fastest man - America’s <b>Tyson Gay - is more than a meter behind</b>. That’s about the length of a cricket bat.'
 	    },
 	    {
-	        'highlight':'none',
-	        'arrow':'Jamaica',
-	        'text':'Usain Bolt',
-	        'narrative':'Usain Bolt’s 2009 record at 9.58s, continues to be the fastest in the world.'
+	        'narrative':'<span class ="small">India\'s Amiya Kumar Mallick is farther behind: 6.63 meters. But his record - 10.26 seconds - is <b>six-tenths of a second behind</b> Bolt. That’s how long it takes to blink twice.</span>'
 	    },
 	    {
-	        'highlight':'none',
-	        'arrow':'Jamaica',
-	        'text':'Usain Bolt',
-	        'narrative':'Usain Bolt’s 2009 record at 9.58s, continues to be the fastest in the world.'
+	        'narrative':'<span class ="small">Mallick’s record was good enough to win him a gold medal at the Melbourne Olympics in 1956. Today, at least <b>100 countries</b> have a faster national record than <span class = "india">India</span>.</span> '
+	    },
+	    {
+	        'narrative':'<span class = "big"><b>112 countries</b> are slower.</big>'
+	    },
+	    {
+	        'narrative':'<span class = "big">In Asia, <b><span class = "india">India</span> is ranked 16.</b> It’s ahead of 32 countries.</big>'
+	    },
+	    {
+	        'narrative':'In South Asia, <b><span class = "india">India</span> is the fastest.</b> Sri Lanka comes close, finishing just 0.02 seconds later.'
+	    },
+	    {
+	        'narrative':'<span class ="small">Bhutan at 12.15 seconds is the slowest country in the world. That’s <b>two-and-half seconds behind Bolt.</b> That’s probably how long it takes to say, “Wow! Usain Bolt is really fast.”</span>'
+	    },
+	    {
+	        'narrative':'Pick any two countries and watch their fastest runners compete. '
 	    }
 	]
 	
@@ -104,9 +110,8 @@
 	    }
 	})
 	
-	
 	var box = {
-	            height: $(window).height()*2,
+	            height: $(window).height()*2.2,
 	            width: $(window).width(),  
 	            sidemargin: 50, 
 	            topmargin: 50
@@ -115,14 +120,14 @@
 	// this animates our lovely scroll
 	var scrollAnimator = function(){
 	    $("html, body").animate(
-	        { scrollTop: ($('.dummydiv').position().top)}
-	        , 100/10.43841336 * 1000, 'swing'
+	        { scrollTop: ($('.legend').position().top)-($(window).height()*0.97)}
+	        , 100/10.43841336 * 700, 'swing'
 	    );
 	};
 	
 	var starttime, currenttime
 	
-	var barwidth = 2;
+	var barwidth = 2, arrowlength = 40
 	
 	var ease = d3.easeLinear;
 	
@@ -152,10 +157,10 @@
 	            clearInterval(stopWatchTimer)
 	        }
 	    }
-	
+	    var countryList = _.chain(men).pluck('Country').uniq().value()
 	    // define scale bands
 	    var x = d3.scaleBand()
-	                .domain(_.chain(men).pluck('Country').uniq().value())
+	                .domain(countryList)
 	                .range([0,(box.width-(box.sidemargin*2))])
 	
 	    // y scales!
@@ -224,6 +229,7 @@
 	
 	    chart.selectAll(".bar")
 	        .sort(function(a, b) { return x(a.pos_at_max_dist) - x(b.pos_at_max_dist); })
+	    var India = _.findWhere(men,{Country:'India'})
 	
 	    // what happens when you click on the start button
 	    $('.button').on("click",function(){
@@ -252,7 +258,6 @@
 	            .style('opacity',0)
 	            .duration(1000)
 	
-	
 	        // arrow for Jamaica
 	
 	        var arrowright = chart.append("g")
@@ -263,16 +268,16 @@
 	        var labelLineR = arrowright.append("line")
 	            .attr("x1", (x("Jamaica") + x.bandwidth()))
 	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("Jamaica") + 40)
+	            .attr("x2", x("Jamaica") + arrowlength)
 	            .attr("y2", box.height * 0.75)
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
 	        var rightR = arrowright.append("line")
 	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("Jamaica") + 40)
+	            .attr("x1", x("Jamaica") + arrowlength)
 	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("Jamaica") + 40 - 8)
+	            .attr("x2", x("Jamaica") + (arrowlength - 8))
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
@@ -325,30 +330,141 @@
 	
 	    var stepperpos = 1;
 	
-	    $('#next').on('click',function(){
-	
-	        stepperpos = stepperpos + 1;
-	
-	        if (stepperpos = 2){
-	        d3.select('.stepper-container .text')
-	            .transition()
-	            .delay(100)
-	            .style('opacity',0)
-	            .duration(300)
-	            .transition()
-	            .delay(300)
-	            .text(steps[stepperpos-1].narrative)
-	            .style('opacity',1)
-	            .duration(500)
-	
+	    $('.progress-step').on('click',function(){
 	        $('.steps .progress-step').removeClass('progress-active')
+	        $(this).addClass('progress-active')
+	        var currentstep = $(this).attr('id').split('step')[1]
+	        if (stepperpos>=1){
+	            $('#prev').removeClass('inactive')
+	        } 
+	        if (stepperpos<steps.length-1){
+	            $('#next').removeClass('inactive')
+	        } else {
+	            $('#next').addClass('inactive')
+	        }
+	        if (stepperpos==2){
+	            $('#prev').addClass('inactive')
+	        } 
+	        if (stepperpos<=steps.length){
+	            $('#next').removeClass('inactive')
+	        }
+	        stepperpos = changeSlide(currentstep-1)
+	    })
 	
-	        $('#step'+stepperpos).addClass('progress-active')
+	    $('#next').on('click',function(){
+	        if (stepperpos>=1){
+	            $('#prev').removeClass('inactive')
+	        } 
+	        if (stepperpos<steps.length-1){
+	            $('#next').removeClass('inactive')
+	        } else {
+	            $('#next').addClass('inactive')
+	        }
+	        stepperpos = changeSlide(stepperpos)
+	        
+	    })
+	    $('#prev').on('click',function(){
+	        if (stepperpos==2){
+	            $('#prev').addClass('inactive')
+	        } 
 	
-	        // $('.stepper-container .text').html()
+	        if (stepperpos<=steps.length){
+	            $('#next').removeClass('inactive')
+	        }
+	        stepperpos = changeSlide(stepperpos-2)
 	
-	        d3.selectAll("#step1-arrow").remove()
+	    })
 	
+	    // code for round function
+	
+	    function round(value, precision) {
+	        var multiplier = Math.pow(10, precision || 0);
+	        return Math.round(value * multiplier) / multiplier;
+	    }
+	
+	    // code for stopwatch
+	    var stopwatch = d3.select('.stopwatch')
+	
+	    // code to clean time
+	
+	    function getcleantime(time){
+	        var milliseconds = ((time % 1000)/10).toFixed(0)
+	        var seconds = parseInt(time/1000)
+	        if (seconds<1){
+	            seconds = '00'
+	        } else {
+	            seconds = '0'+seconds
+	        }
+	        if (milliseconds<1){
+	            milliseconds = '00'
+	        } else if (milliseconds<10){
+	            milliseconds = '0'+milliseconds
+	        }
+	        return seconds + "." + milliseconds 
+	    }
+	
+	    // Slide 1
+	
+	    // Slide 2
+	    function secondSlide(){
+	
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style("fill",function(e){if (e.Country == 'United States' || e.Country=='Jamaica'){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
+	            .duration(1000)
+	
+	        // arrow for US
+	        var selected = _.findWhere(men,{Country:'United States'})
+	
+	        var arrowleft = chart.append("g")
+	                            .attr('class','arrowleft arrow a-step')
+	                            .attr('id','step2-arrow')
+	                            .style("opacity", 0)
+	
+	        var labelLine = arrowleft.append("line")
+	            .attr("x1", x("United States"))
+	            .attr("y1", box.height * 0.8)
+	            .attr("x2", x("United States") - arrowlength+x.bandwidth())
+	            .attr("y2", box.height * 0.8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var right = arrowleft.append("line")
+	            .attr("y1", box.height * 0.8)
+	            .attr("x1", x("United States") - arrowlength+x.bandwidth())
+	            .attr("y2", box.height * 0.8 + 5)
+	            .attr("x2", x("United States") - arrowlength+x.bandwidth() + 8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var left = arrowleft.append("line")
+	            .attr("x1", right.attr("x1"))
+	            .attr("y1", right.attr("y1"))
+	            .attr("x2", right.attr("x2"))
+	            .attr("y2", right.attr("y2")-10)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftArrowtext = arrowleft.append("text")
+	                                .attr("class","label-text left-arrow-text")
+	                                .text("Tyson Gay")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-75-(x.bandwidth()*2)) +","+ (parseInt(labelLine.attr("y1")              )+5) +")")
+	
+	        d3.selectAll('.arrow')
+	            .transition()
+	            .delay(200)
+	            .style("opacity",1)
+	            .duration(1000)
+	
+	    }
+	
+	    // Slide 3
+	    function thirdSlide(){
+	        d3.selectAll('#step2-arrow, #step1-arrow,.refline')
+	            // .transition()
+	            // .style('opacity',0)
+	            .remove()
+	        
 	        // highlight Anil Kumar and Osain Bolt
 	        d3.selectAll('.bar')
 	            .transition()
@@ -356,7 +472,6 @@
 	            .duration(1000)
 	
 	        // arrow for India
-	        var lowerComp = _.findWhere(men,{Country:'India'})
 	
 	        var arrowleft = chart.append("g")
 	                            .attr('class','arrowleft arrow a-step')
@@ -365,16 +480,16 @@
 	        var labelLine = arrowleft.append("line")
 	            .attr("x1", x("India"))
 	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("India") - 40)
+	            .attr("x2", x("India") - arrowlength+x.bandwidth())
 	            .attr("y2", box.height * 0.75)
 	            .attr("stroke-width",1)
 	            .attr("stroke", "#2D2D2D");
 	
 	        var right = arrowleft.append("line")
 	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("India") - 40)
+	            .attr("x1", x("India") - arrowlength+x.bandwidth())
 	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("India") - 40 + 8)
+	            .attr("x2", x("India") - arrowlength+x.bandwidth() + 8)
 	            .attr("stroke-width",1)
 	            .attr("stroke", "#2D2D2D");
 	
@@ -400,16 +515,16 @@
 	        var labelLineR = arrowright.append("line")
 	            .attr("x1", (x("Jamaica") + x.bandwidth()))
 	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("Jamaica") + 40)
+	            .attr("x2", x("Jamaica") + arrowlength)
 	            .attr("y2", box.height * 0.75)
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
 	        var rightR = arrowright.append("line")
 	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("Jamaica") + 40)
+	            .attr("x1", x("Jamaica") + arrowlength)
 	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("Jamaica") + 40 - 8)
+	            .attr("x2", x("Jamaica") +( arrowlength - 8))
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
@@ -440,7 +555,7 @@
 	            .append('line')
 	            .attr('class','difference-l')
 	            .attr("x1", (x("India")-(x.bandwidth())*2))
-	            .attr("y1", y(lowerComp.pos_at_max_dist))
+	            .attr("y1", y(India.pos_at_max_dist))
 	            .attr("x2", (x("India")-(x.bandwidth())*2))
 	            .attr("y2", y(100))
 	            .style('stroke','black')
@@ -454,9 +569,9 @@
 	        d3.select('.difference').append('line')
 	            .attr('class','difference-l')
 	            .attr("x1", (x("India")-(x.bandwidth())*2))
-	            .attr("y1", y(_.findWhere(men,{Country:'India'}).pos_at_max_dist))
+	            .attr("y1", y(India.pos_at_max_dist))
 	            .attr("x2", (x("India")))
-	            .attr("y2", y(_.findWhere(men,{Country:'India'}).pos_at_max_dist))
+	            .attr("y2", y(India.pos_at_max_dist))
 	            .style('stroke','black')
 	            .style('stroke-width','1px')
 	            .style('opacity',0)
@@ -479,46 +594,226 @@
 	            .style("opacity",1)
 	            .duration(1000)
 	
-	        var diff = round((100 - lowerComp.pos_at_max_dist),2)
+	        var diff = round((100 - India.pos_at_max_dist),2)
 	
 	        d3.select('.difference')
 	            .append('text')
 	            .text(diff+"m")
 	            .attr("class","label-text")
-	            .attr('transform','translate(' + ( x("India")-(x.bandwidth()*5)-40) + "," + y(parseFloat(lowerComp.pos_at_max_dist)+parseFloat(diff/2)) +")")
-	        }
+	            .attr('transform','translate(' + ( x("India")-(x.bandwidth()*5)-40) + "," + y(parseFloat(India.pos_at_max_dist)+parseFloat(diff/2)) +")")
 	
+	    }
+	
+	    // Slide 4
+	
+	    function fourthSlide(){
+	        // highlight fast people
 	        
-	    })
 	
-	    // code for round function
+	        d3.selectAll('.arrow, .difference')
+	            // .transition()
+	            // .style('opacity',0)
+	            .remove()
 	
-	    function round(value, precision) {
-	        var multiplier = Math.pow(10, precision || 0);
-	        return Math.round(value * multiplier) / multiplier;
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style("fill",function(e){if (parseFloat(e.pos_at_max_dist)>=parseFloat(India.pos_at_max_dist)){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
+	            // .style("opacity",function(e){
+	            //     if (parseFloat(e.pos_at_max_dist)>parseFloat(India.pos_at_max_dist)){
+	            //         return 0.4
+	            //     } else if (parseFloat(e.pos_at_max_dist)==parseFloat(India.pos_at_max_dist)) {
+	            //         return 1
+	            //     } else {
+	            //         return 1
+	            //     }
+	            // })
+	            .duration(1000)
+	
+	        var arrowleft = chart.append("g")
+	                            .attr('class','shadow arrowleft arrow a-step')
+	
+	        var labelLine = arrowleft.append("line")
+	            .attr("x1", x("India"))
+	            .attr("y1", box.height * 0.75)
+	            .attr("x2", x("India") - arrowlength+x.bandwidth())
+	            .attr("y2", box.height * 0.75)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var right = arrowleft.append("line")
+	            .attr("y1", box.height * 0.75)
+	            .attr("x1", x("India") - arrowlength+x.bandwidth())
+	            .attr("y2", box.height * 0.75 + 5)
+	            .attr("x2", x("India") - arrowlength+x.bandwidth() + 8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var left = arrowleft.append("line")
+	            .attr("x1", right.attr("x1"))
+	            .attr("y1", right.attr("y1"))
+	            .attr("x2", right.attr("x2"))
+	            .attr("y2", right.attr("y2")-10)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var arrowleft = chart.append("g")
+	                            .attr('class','arrowleft arrow a-step')
+	
+	        var labelLine = arrowleft.append("line")
+	            .attr("x1", x("India"))
+	            .attr("y1", box.height * 0.75)
+	            .attr("x2", x("India") - arrowlength+x.bandwidth())
+	            .attr("y2", box.height * 0.75)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var right = arrowleft.append("line")
+	            .attr("y1", box.height * 0.75)
+	            .attr("x1", x("India") - arrowlength+x.bandwidth())
+	            .attr("y2", box.height * 0.75 + 5)
+	            .attr("x2", x("India") - arrowlength+x.bandwidth() + 8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var left = arrowleft.append("line")
+	            .attr("x1", right.attr("x1"))
+	            .attr("y1", right.attr("y1"))
+	            .attr("x2", right.attr("x2"))
+	            .attr("y2", right.attr("y2")-10)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        arrowleft.append("text")
+	                                .attr("class","label-text left-arrow-text shadow")
+	                                .text("India")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	                                .attr('st')
+	
+	        var leftArrowtext = arrowleft.append("text")
+	                                .attr("class","label-text left-arrow-text")
+	                                .text("India")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	                                .attr('st')                    
+	        
 	    }
 	
-	    // code for stopwatch
-	   var stopwatch = d3.select('.stopwatch')
+	    // Slide 5
 	
-	    // code to clean time
-	
-	    function getcleantime(time){
-	        var milliseconds = ((time % 1000)/10).toFixed(0)
-	        var seconds = parseInt(time/1000)
-	        if (seconds<1){
-	            seconds = '00'
-	        } else {
-	            seconds = '0'+seconds
-	        }
-	        if (milliseconds<1){
-	            milliseconds = '00'
-	        } else if (milliseconds<10){
-	            milliseconds = '0'+milliseconds
-	        }
-	        return seconds + "." + milliseconds 
+	    function fifthSlide(){
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style("fill",function(e){if (parseFloat(e.pos_at_max_dist)<=parseFloat(India.pos_at_max_dist)){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
+	            // .style("opacity",function(e){
+	            //     if (parseFloat(e.pos_at_max_dist)<parseFloat(India.pos_at_max_dist)){
+	            //         return 0.4
+	            //     } else if (parseFloat(e.pos_at_max_dist)==parseFloat(India.pos_at_max_dist)) {
+	            //         return 1
+	            //     } else {
+	            //         return 1
+	            //     }
+	            // })
+	            .duration(1000)
 	    }
 	
+	    // Slide 6
+	
+	    function sixthSlide(){
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style("fill",function(e){if (e.Continent=="Asia"){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
+	            .style('opacity',1)
+	            .duration(1000)
+	    }
+	
+	    // Slide 7
+	    function seventhSlide(){
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style("fill",function(e){
+	                if (_.contains(['India','Pakistan','Nepal','Bangladesh','Afghanistan','Maldives','Bhutan'], e.Country)){
+	                    return colorRange(e['Continent'])
+	                } else {
+	                    return "#E5E5E5"
+	                }
+	            })
+	            .duration(1000)
+	    }
+	
+	    // Slide 8
+	
+	    function eighthSlide(){
+	
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style("fill",function(e){
+	                if (_.contains(['India','Pakistan','Nepal','Bangladesh','Afghanistan','Maldives','Bhutan'], e.Country)){
+	                    return colorRange(e['Continent'])
+	                } else {
+	                    return "#E5E5E5"
+	                }
+	            })
+	            .duration(1000)
+	    }
+	
+	    // Slide 9
+	
+	    function ninthSlide(){
+	        // d3.select('.stepper-container .text')
+	        //     .append('select')
+	        //     .attr('class','country-selector')
+	
+	        // $('country-selector').append('<option>'+'some'+'</option>')
+	    }
+	
+	
+	    // MISC
+	
+	    function appendRefLine(val){
+	        var refline = chart.append('line')
+	                        .attr('class', 'refline')
+	                        .attr("y1", y(val))
+	                        .attr("x1", 0)
+	                        .attr("y2", y(val))
+	                        .attr("x2", box.width)
+	    }
+	
+	    function changeSlide(pos){
+	        pos = pos+1;
+	        if (pos == 2){
+	            secondSlide()
+	        } else if (pos == 3){
+	            thirdSlide()
+	        } else if (pos == 4){
+	            fourthSlide()
+	            appendRefLine(India.pos_at_max_dist)
+	        } else if (pos == 5){
+	            fifthSlide()
+	        } else if (pos == 6){
+	            sixthSlide()
+	        } else if (pos == 7){
+	            seventhSlide()
+	        } else if (pos == 9){
+	            ninthSlide()
+	        }
+	        updateText(pos)
+	        return pos
+	    }
+	
+	    function updateText(pos){
+	        d3.select('.stepper-container .text')
+	            .transition()
+	            .delay(100)
+	            .style('opacity',0)
+	            .duration(300)
+	            .transition()
+	            .delay(100)
+	            .style('opacity',1)
+	            .duration(300)
+	            setTimeout(function(){$('.stepper-container .text').html(steps[pos-1].narrative)},450)
+	        
+	        $('.steps .progress-step').removeClass('progress-active')
+	        $('#step'+pos).addClass('progress-active')
+	    }
 	})
 
 

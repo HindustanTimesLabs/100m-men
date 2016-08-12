@@ -1,8 +1,60 @@
+$background: #FCFCFC;
 $darkgrey: #3a3a3a;
 $lightgrey: #C7C7C7;
 $serif: 'Prata', serif;
 $sans-serif: 'Lato';
 body{
+    /* nav css */
+    .nav{
+        color: white;
+        height: 25px;
+        background-color: $darkgrey;
+        width: 100%;
+        position: fixed;
+        z-index: 500;
+        padding: 0.7em;
+        -webkit-box-shadow: -2px 1px 25px -8px rgba(0,0,0,0.64);
+        -moz-box-shadow: -2px 1px 25px -8px rgba(0,0,0,0.64);
+        box-shadow: -2px 1px 25px -8px rgba(0,0,0,0.64);
+        .nav-logo{
+            
+            
+            padding-left: 0.2em;
+            vertical-align: middle;
+        }
+        .nav-logo.desktop{
+            height: 15px;
+            display: inline-block;
+            @media(max-width:650px){
+                display: none;
+            }
+        }
+        .nav-logo.mobile{
+            height: 25px;
+            display: none;
+            @media(max-width:650px){
+                display: inline-block ;
+            }
+        }
+        .right-container{
+            position: absolute;
+            right: 40px;
+            top: 8px;
+            font-size: 1.6em;
+            .social-button{
+                margin-right: 0.4em;
+            }
+            .social-button:hover{
+                color: #aaa;
+                cursor: pointer;
+            }
+        }
+        @media(max-width: 700px){
+            position: relative;
+            margin-bottom: 1.5em;
+        }
+    }
+    background-color: $background;
     margin: 0;
     font-family:$sans-serif;
 
@@ -98,14 +150,15 @@ body{
 
     .intro-text{
         width: 90%;
-        max-width: 550px;
+        max-width: 600px;
         padding-top: 5em;
         text-align: center;
         margin: 1em auto 2em auto;
-        font-size: 1.1em;
-        line-height: 1.4em;
+        font-size: 1.4em;
+        line-height: 1.7em;
         @media(max-width: 850px){
             padding-top: 0;
+            font-size: 1.3em;
         }
     }
     .stopwatch.inactive{
@@ -180,6 +233,12 @@ body{
         }
     }
 
+    .shadow,.shadow line{
+        stroke: white;
+        stroke-width: 7.5px;
+        opacity: 0.9;
+    }
+
     .label-text{
         font-weight: 500;
         font-size: 1.1em;
@@ -228,7 +287,7 @@ body{
 
     .button:hover{
         color: $darkgrey;
-        background-color: white;
+        background-color: $background;
     }
 
     .axis path,
@@ -244,13 +303,23 @@ body{
         stroke: $lightgrey;
     }
 
+    .refline{
+        stroke-dasharray:5, 5;
+        stroke-width:1;
+        stroke: $darkgrey;
+    }
+
+    span.india{
+        border-bottom: dashed 2px $darkgrey;
+    }
+
     .stepper-container{
         background-color: rgba(255,255,255,0.9);
         padding: 1em;
         position: fixed;
-        top: 10px;
+        top: 50px;
         left: 70px;
-        width: 350px;
+        width: 400px;
         border-radius: 5px;
         opacity: 0;
         .progress-step{
@@ -260,10 +329,26 @@ body{
             border-radius: 50%;
             border: solid 1px $darkgrey;
             margin-right: 0.8em;
+            cursor: pointer;
+        }
+        .text .big{
+            font-size: 1.3em;
+        }
+        .text .small{
+            font-size: 0.94em;
+                line-height: 1em;
         }
         .text{
+            min-height: 85px;
             margin: 1em 0;
             line-height: 1.8em;
+            font-size: 1em;
+            b{
+                font-weight: 900;
+            }
+            @media(max-width: 800px){
+                font-size: 1em
+            }
         }
         .progress-button{
             background-color: black;
@@ -272,11 +357,16 @@ body{
             padding: 0.3em;
             border-radius: 5px;
             text-align: center;
+            display: inline-block;
+            margin-right: 1em;
             width: 80px;
             @media(max-width: 500px){
                 font-size: 0.9em;
                 width: 60px;
             }
+        }
+        .progress-button.inactive{
+            display: none;
         }
         .progress-button:hover{
             border-color: black;
@@ -286,6 +376,10 @@ body{
         }
         .progress-active.progress-step{
             background-color: $darkgrey
+        }
+
+        .progress{
+        
         }
 
         @media(max-width: 800px){
@@ -299,6 +393,10 @@ body{
             padding: 0.5em 1em;
         }
 
+        @media(max-width: 700px){
+            top: 5px;
+        }
+
         @media(max-width: 600px){
             -webkit-box-shadow: -1px 3px 20px -5px rgba(0,0,0,0.68);
             -moz-box-shadow: -1px 3px 20px -5px rgba(0,0,0,0.68);
@@ -310,5 +408,14 @@ body{
                 font-size: 0.9em;
             }
         }
+    }
+    .credits{
+       font-size: 0.85em;
+        color: #999999;
+        width: 95%;
+        margin-top: 5em;
+        margin-bottom: 2em;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
