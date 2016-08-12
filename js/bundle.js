@@ -74,7 +74,7 @@
 	        'highlight':'Jamaica',
 	        'arrow':'Jamaica',
 	        'text':'Usain Bolt',
-	        'narrative':'Usain Bolt is still the fastest human being. Ever. His record: <b>9.58 seconds</b> in 2009.'
+	        'narrative':'<span class = "med">Usain Bolt is still the fastest human being. Ever. His record: <b>9.58 seconds</b> in 2009.</span>'
 	    },
 	    {
 	        'narrative':'When Bolt crosses the finish line, the second fastest man - America’s <b>Tyson Gay - is more than a meter behind</b>. That’s about the length of a cricket bat.'
@@ -92,7 +92,7 @@
 	        'narrative':'<span class = "big">In Asia, <b><span class = "india">India</span> is ranked 16.</b> It’s ahead of 32 countries.</big>'
 	    },
 	    {
-	        'narrative':'In South Asia, <b><span class = "india">India</span> is the fastest.</b> Sri Lanka comes close, finishing just 0.02 seconds later.'
+	        'narrative':'<span class = "med">In South Asia, <b><span class = "india">India</span> is the fastest.</b> Sri Lanka comes close, finishing just 0.02 seconds later.</span>'
 	    },
 	    {
 	        'narrative':'<span class ="small">Bhutan at 12.15 seconds is the slowest country in the world. That’s <b>two-and-half seconds behind Bolt.</b> That’s probably how long it takes to say, “Wow! Usain Bolt is really fast.”</span>'
@@ -111,7 +111,7 @@
 	})
 	
 	var box = {
-	            height: $(window).height()*2.2,
+	            height: $(window).height()*2.3,
 	            width: $(window).width(),  
 	            sidemargin: 50, 
 	            topmargin: 50
@@ -226,9 +226,8 @@
 	        .attr("y", function(d) { return 0; })
 	        .attr("height",0)
 	        .style("fill",function(e){return colorRange(e['Continent'])})
+	        .on('click',function(e){console.log(e)})
 	
-	    chart.selectAll(".bar")
-	        .sort(function(a, b) { return x(a.pos_at_max_dist) - x(b.pos_at_max_dist); })
 	    var India = _.findWhere(men,{Country:'India'})
 	
 	    // what happens when you click on the start button
@@ -243,6 +242,7 @@
 	            .attr("height", function(d) { return y(d['pos_at_max_dist']); })
 	            .duration(function(e){return e['pos_at_max_dist']/e['speed'] * 1000 })
 	
+	            firstSlide((mintime*1000)+1000)
 	        d3.select('.stepper-container')
 	            .transition()
 	            .style('z-index',10)
@@ -258,55 +258,7 @@
 	            .style('opacity',0)
 	            .duration(1000)
 	
-	        // arrow for Jamaica
-	
-	        var arrowright = chart.append("g")
-	                            .attr('class','a-step arrowright arrow')
-	                            .attr('id','step1-arrow')
-	                            .style("opacity", 0)
-	
-	        var labelLineR = arrowright.append("line")
-	            .attr("x1", (x("Jamaica") + x.bandwidth()))
-	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("Jamaica") + arrowlength)
-	            .attr("y2", box.height * 0.75)
-	            .attr("stroke-width", 1)
-	            .attr("stroke", "#2D2D2D");
-	
-	        var rightR = arrowright.append("line")
-	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("Jamaica") + arrowlength)
-	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("Jamaica") + (arrowlength - 8))
-	            .attr("stroke-width", 1)
-	            .attr("stroke", "#2D2D2D");
-	
-	        var leftR = arrowright.append("line")
-	            .attr("x1", rightR.attr("x1"))
-	            .attr("y1", rightR.attr("y1"))
-	            .attr("x2", rightR.attr("x2"))
-	            .attr("y2", rightR.attr("y2") - 10)
-	            .attr("stroke-width", 1)
-	            .attr("stroke", "#2D2D2D");
-	
-	         var rightArrowText = arrowright.append("text")
-	                                .attr("class","label-text right-arrow-text")
-	                                .text("Usain Bolt")
-	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
-	    
-	        // fade in the arrow
-	        d3.selectAll('#step1-arrow')
-	            .transition()
-	            .delay((mintime*1000)+1000)
-	            .style("opacity",1)
-	            .duration(1000)
-	
-	        // highlight Usain Bolt
-	        d3.selectAll('.bar')
-	            .transition()
-	            .delay((mintime*1000)+1000)
-	            .style("fill",function(e){if (e.Country=='Jamaica'){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
-	            .duration(1000)
+	        
 	
 	    })
 	
@@ -404,9 +356,99 @@
 	    }
 	
 	    // Slide 1
+	    function firstSlide(timedelay){
+	        $('.a-step').remove()
+	        
+	        // arrow for Jamaica
+	
+	        var arrowright = chart.append("g")
+	                            .attr('class','a-step arrowright arrow')
+	                            .attr('id','step1-arrow')
+	                            .style("opacity", 0)
+	
+	        var labelLineR = arrowright.append("line")
+	            .attr("x1", (x("Jamaica") + x.bandwidth()))
+	            .attr("y1", box.height * 0.75)
+	            .attr("x2", x("Jamaica") + arrowlength)
+	            .attr("y2", box.height * 0.75)
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var rightR = arrowright.append("line")
+	            .attr("y1", box.height * 0.75)
+	            .attr("x1", x("Jamaica") + arrowlength)
+	            .attr("y2", box.height * 0.75 + 5)
+	            .attr("x2", x("Jamaica") + (arrowlength - 8))
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftR = arrowright.append("line")
+	            .attr("x1", rightR.attr("x1"))
+	            .attr("y1", rightR.attr("y1"))
+	            .attr("x2", rightR.attr("x2"))
+	            .attr("y2", rightR.attr("y2") - 10)
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	         var rightArrowText = arrowright.append("text")
+	                                .attr("class","label-text right-arrow-text")
+	                                .text("Usain Bolt")
+	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
+	    
+	        // fade in the arrow
+	        d3.selectAll('#step1-arrow')
+	            .transition()
+	            .delay(timedelay)
+	            .style("opacity",1)
+	            .duration(1000)
+	
+	        // highlight Usain Bolt
+	        d3.selectAll('.bar')
+	            .transition()
+	            .delay(timedelay)
+	            .style("fill",function(e){if (e.Country=='Jamaica'){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
+	            .duration(1000)
+	    }
 	
 	    // Slide 2
 	    function secondSlide(){
+	        $('.a-step, .difference').remove()
+	
+	        // arrow for Jamaica
+	
+	        var arrowright = chart.append("g")
+	                            .attr('class','a-step arrowright arrow')
+	                            .attr('id','step1-arrow')
+	                            .style("opacity", 0)
+	
+	        var labelLineR = arrowright.append("line")
+	            .attr("x1", (x("Jamaica") + x.bandwidth()))
+	            .attr("y1", box.height * 0.75)
+	            .attr("x2", x("Jamaica") + arrowlength)
+	            .attr("y2", box.height * 0.75)
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var rightR = arrowright.append("line")
+	            .attr("y1", box.height * 0.75)
+	            .attr("x1", x("Jamaica") + arrowlength)
+	            .attr("y2", box.height * 0.75 + 5)
+	            .attr("x2", x("Jamaica") + (arrowlength - 8))
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftR = arrowright.append("line")
+	            .attr("x1", rightR.attr("x1"))
+	            .attr("y1", rightR.attr("y1"))
+	            .attr("x2", rightR.attr("x2"))
+	            .attr("y2", rightR.attr("y2") - 10)
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	         var rightArrowText = arrowright.append("text")
+	                                .attr("class","label-text right-arrow-text")
+	                                .text("Usain Bolt")
+	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
 	
 	        d3.selectAll('.bar')
 	            .transition()
@@ -460,7 +502,7 @@
 	
 	    // Slide 3
 	    function thirdSlide(){
-	        d3.selectAll('#step2-arrow, #step1-arrow,.refline')
+	        d3.selectAll('.arrow,.refline')
 	            // .transition()
 	            // .style('opacity',0)
 	            .remove()
@@ -742,17 +784,48 @@
 	    // Slide 8
 	
 	    function eighthSlide(){
+	         $("html, body").animate(
+	            { scrollTop: ($('body').scrollTop()-80)}
+	            , 1000, 'swing'
+	        );
+	         // arrow for Bhutan
 	
-	        d3.selectAll('.bar')
-	            .transition()
-	            .style("fill",function(e){
-	                if (_.contains(['India','Pakistan','Nepal','Bangladesh','Afghanistan','Maldives','Bhutan'], e.Country)){
-	                    return colorRange(e['Continent'])
-	                } else {
-	                    return "#E5E5E5"
-	                }
-	            })
-	            .duration(1000)
+	         var bhutan = _.findWhere(men,{Country:'Bhutan'})
+	        var arrowright = chart.append("g")
+	                            .attr('class','arrowright arrow a-step')
+	                            .style("opacity", 0)
+	
+	        var labelLineR = arrowright.append("line")
+	            .attr("x1", (x("Bhutan") + x.bandwidth()))
+	            .attr("y1", y(bhutan.pos_at_max_dist-1))
+	            .attr("x2", x("Bhutan") + arrowlength)
+	            .attr("y2", y(bhutan.pos_at_max_dist-1))
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var rightR = arrowright.append("line")
+	            .attr("y1", y(bhutan.pos_at_max_dist-1))
+	            .attr("x1", x("Bhutan") + arrowlength)
+	            .attr("y2", y(bhutan.pos_at_max_dist-1) + 5)
+	            .attr("x2", x("Bhutan") +( arrowlength - 8))
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftR = arrowright.append("line")
+	            .attr("x1", rightR.attr("x1"))
+	            .attr("y1", rightR.attr("y1"))
+	            .attr("x2", rightR.attr("x2"))
+	            .attr("y2", rightR.attr("y2") - 10)
+	            .attr("stroke-width", 1)
+	            .attr("stroke", "#2D2D2D");
+	
+	         var rightArrowText = arrowright.append("text")
+	                                .attr("class","label-text right-arrow-text")
+	                                .text("Bhutan")
+	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
+	        arrowright.transition()
+	                    .style('opacity',1)
+	                    .duration(1000)
 	    }
 	
 	    // Slide 9
@@ -779,7 +852,9 @@
 	
 	    function changeSlide(pos){
 	        pos = pos+1;
-	        if (pos == 2){
+	        if (pos == 1){
+	            firstSlide (0)
+	        } else if (pos == 2){
 	            secondSlide()
 	        } else if (pos == 3){
 	            thirdSlide()
@@ -792,6 +867,8 @@
 	            sixthSlide()
 	        } else if (pos == 7){
 	            seventhSlide()
+	        } else if (pos == 8){
+	            eighthSlide()
 	        } else if (pos == 9){
 	            ninthSlide()
 	        }

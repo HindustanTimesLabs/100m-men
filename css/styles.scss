@@ -52,6 +52,7 @@ body{
         @media(max-width: 700px){
             position: relative;
             margin-bottom: 1.5em;
+            width: inherit;
         }
     }
     background-color: $background;
@@ -337,6 +338,9 @@ body{
         .text .small{
             font-size: 0.94em;
                 line-height: 1em;
+        }
+        text .med{
+        font-size: 1.1em;
         }
         .text{
             min-height: 85px;
