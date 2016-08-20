@@ -17,8 +17,6 @@ body{
         -moz-box-shadow: -2px 1px 25px -8px rgba(0,0,0,0.64);
         box-shadow: -2px 1px 25px -8px rgba(0,0,0,0.64);
         .nav-logo{
-            
-            
             padding-left: 0.2em;
             vertical-align: middle;
         }
@@ -41,6 +39,10 @@ body{
             right: 40px;
             top: 8px;
             font-size: 1.6em;
+            a{
+                color: inherit;
+                text-decoration: inherit;
+            }
             .social-button{
                 margin-right: 0.4em;
             }
@@ -48,8 +50,11 @@ body{
                 color: #aaa;
                 cursor: pointer;
             }
+            @media(max-width: 500px){
+                right: 10px;
+            }
         }
-        @media(max-width: 700px){
+        @media(max-width: 800px){
             position: relative;
             margin-bottom: 1.5em;
             width: inherit;
@@ -304,9 +309,9 @@ body{
         stroke: $lightgrey;
     }
 
-    .refline{
+    .refline line{
         stroke-dasharray:5, 5;
-        stroke-width:1;
+        stroke-width:2;
         stroke: $darkgrey;
     }
 
@@ -323,24 +328,14 @@ body{
         width: 400px;
         border-radius: 5px;
         opacity: 0;
-        .progress-step{
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            border: solid 1px $darkgrey;
-            margin-right: 0.8em;
-            cursor: pointer;
-        }
-        .text .big{
-            font-size: 1.3em;
-        }
-        .text .small{
-            font-size: 0.94em;
-                line-height: 1em;
-        }
-        text .med{
-        font-size: 1.1em;
+        .steps{
+            height: 2px;
+            width: 0;
+            background-color: black;
+            -moz-transition: all .2s linear;
+        -webkit-transition: all .2s linear;
+        -o-transition: all .2s linear;
+        transition: all .2s linear;
         }
         .text{
             margin: 1em 0;
@@ -352,6 +347,9 @@ body{
             @media(max-width: 800px){
                 font-size: 1em
             }
+        }
+        .progress{
+        text-align: right;
         }
         .progress-button{
             background-color: black;
@@ -377,26 +375,18 @@ body{
             color: black;
             cursor: pointer;
         }
-        .progress-active.progress-step{
-            background-color: $darkgrey
-        }
-
-        .progress{
-        
-        }
 
         @media(max-width: 800px){
             max-width: 500px;
             top: 0;
             width: 80%;
             left: 0;
-            min-height: 140px;
             z-index: -1;
             width: 90%;
             padding: 0.5em 1em;
         }
 
-        @media(max-width: 700px){
+        @media(max-width: 800px){
             top: 5px;
         }
 
@@ -420,5 +410,35 @@ body{
         margin-bottom: 2em;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .text{
+        a {
+            color: inherit;
+            text-decoration: inherit;
+            padding: 0.1em 0.4em;
+            font-size: 0.9em;
+            border: solid 1px;
+            display: inline-block;
+            margin-right: 5px;
+            .social{
+                i{
+                    padding-right: 10px;
+                }   
+            }
+        }
+    }
+
+    .mobilelabel{
+        opacity: 0;
+        @media(max-width:700px){
+            opacity: 1
+        }
+    }
+    .desktoplabel{
+        opacity: 1;
+        @media(max-width:700px){
+            opacity: 0
+        }
     }
 }

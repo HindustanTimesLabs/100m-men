@@ -19,6 +19,7 @@
   "author": "hindustantimeslabs",
   "license": "",
   "dependencies": {
+    "d3": "^4.2.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "jquery": "^2.2.3",
     "jquery-ui": "^1.12.0",

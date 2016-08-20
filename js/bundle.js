@@ -69,46 +69,43 @@
 	    }
 	}).scroll();
 	
+	var share = '<p>And in that miniscule amount of time lies Usain Bolt’s glory.</p><a href="https://www.facebook.com/sharer/sharer.php?u=http://www.hindustantimes.com/static/olympics/every-country-fastest-man-in-one-race-100m" target="_blank"><div class = "share fb"><i class="fa fa-facebook social-button" aria-hidden="true"></i> Share</div></a><a href = "http://twitter.com/intent/tweet?url=http://www.hindustantimes.com/static/olympics/every-country-fastest-man-in-one-race-100m&text=Every country\'s fastest man in one race" target="_blank"><div class = "share tw"><i class="fa fa-twitter social-button" aria-hidden="true"></i> Tweet</div></a>'
+	
 	var steps = [
 	    {
 	        'highlight':'Jamaica',
 	        'arrow':'Jamaica',
 	        'text':'Usain Bolt',
-	        'narrative':'Usain Bolt is still the fastest human being. Ever. His record: <b>9.58 seconds</b> in 2009.'
+	        'narrative':'Usain Bolt is still the fastest human. Ever. His current record: <b>9.58 seconds</b> in 2009.'
 	    },
 	    {
-	        'narrative':' When Bolt crosses the finish line, the second fastest man - America’s Tyson Gay - is <b>more than a meter</b> behind. That’s about the length of a cricket bat.'
+	        'narrative':' When Bolt crosses the finish line, the second fastest man &mdash; America’s Tyson Gay &mdash; is <b>more than a meter</b> behind. That’s about the length of a cricket bat.'
 	    },
 	    {
 	        'narrative':'India\'s Amiya Kumar Mallick is <b>6.63 meters</b> behind. At <b>10.26 seconds</b>, he is <b>six-tenths of a second</b> slower than Bolt. That’s how long it takes to blink twice.'
 	    },
 	    {
-	        'narrative':'Mallick’s record was good enough to win him a gold at the Melbourne Olympics in 1956. Today, at least <b>100</b> countries have a faster national record than <span class = "india">India</span>. '
+	        'narrative':'Mallick’s 2016 record would have won him a gold 60 years ago. Today, at least <b>101</b> countries have a faster national record than <span class = "india">India</span>. '
 	    },
 	    {
-	        'narrative':'<b>112</b> countries are slower.'
+	        'narrative':'<b>104</b> countries are slower.'
 	    },
 	    {
-	        'narrative':'In Asia, <span class = "india">India</span> is ranked <b>16</b>. It’s ahead of 32 countries.'
+	        'narrative':'In Asia, Qatar is the fastest. <span class = "india">India</span> is ranked <b>16</b>, ahead of <b>28</b> countries.'
 	    },
 	    {
-	        'narrative':'<span class = "med">In South Asia, <b><span class = "india">India</span> is the fastest.</b> Sri Lanka is right behind, just <b>0.02 seconds</b> too late.</span>'
+	        'narrative':'In South Asia, <span class = "india">India</span> and Sri Lanka are the <b>fastest</b>. They are neck and neck.'
 	    },
 	    {
-	        'narrative':'At <b>12.15 seconds</b>, Bhutan is the <b>slowest.</b>'
+	        'narrative':'Tuvalu &mdash; a tiny Pacific island of 10,000 people &mdash; is the <b>slowest</b> in the world at <b>11.44 seconds.</b>'
 	    },
 	    {
-	        'narrative':'That gap - between the slowest sprinter and the fastest - is a matter of <b>two-and-half seconds.</b>'
+	        'narrative':'That gap &mdash; between Jamaica and Tuvalu &mdash; is <b>1.86 seconds.</b>'
+	    },
+	    {
+	        'narrative':''
 	    }
 	]
-	
-	steps.forEach(function(e,i){
-	    if (i==0){
-	        $('.steps').append('<div class = "progress-step progress-active" id="step'+(i+1)+'"></div>')
-	    } else {
-	        $('.steps').append('<div class = "progress-step" id="step'+(i+1)+'"></div>')
-	    }
-	})
 	
 	var box = {
 	            height: $(window).height()*2.3,
@@ -121,7 +118,7 @@
 	var scrollAnimator = function(){
 	    $("html, body").animate(
 	        { scrollTop: ($('.legend').position().top)-($(window).height()*0.97)}
-	        , 100/10.43841336 * 700, 'swing'
+	        , 100/10.43841336 * 700, 'linear'
 	    );
 	};
 	
@@ -139,10 +136,7 @@
 	    .attr('height', (box.height))
 	    .attr('width',(box.width-box.sidemargin))
 	
-	d3.csv("data/clean_men.csv",function(error,men){
-	
-	    // omit the manual omit folks
-	    men = _.reject(men,{'ManualOmit':'Y'})
+	d3.csv("data/data.csv",function(error,men){
 	
 	    // calculate min time. That is our friend Usain!
 	    var mintime = d3.min(men, function(e){return parseFloat(e.cleantime)})
@@ -150,10 +144,16 @@
 	    // STOPWATCH YAY
 	    var stopWatchTimer = function(){
 	        currenttime = Date.now()
-	        if (currenttime-starttime < mintime*1000){
+	        if (currenttime-starttime <= mintime*1000){
 	            d3.select('.time')
 	                .text(getcleantime(currenttime - starttime)+"s")
 	        } else {
+	            if ($('body').attr('time')!='Y'){
+	                $('body').attr('time','Y')
+	                d3.select('.time')
+	                .text('09.58s')
+	            }
+	
 	            clearInterval(stopWatchTimer)
 	        }
 	    }
@@ -240,8 +240,7 @@
 	        d3.selectAll('.bar')
 	            .transition()
 	            .attr("height", function(d) { return y(d['pos_at_max_dist']); })
-	            .duration(function(e){return e['pos_at_max_dist']/e['speed'] * 1000 })
-	
+	            .duration(function(e){return e['pos_at_max_dist']/e['speed'] * 1000 }).ease(d3.easeLinear)
 	            firstSlide((mintime*1000)+1000)
 	        d3.select('.stepper-container')
 	            .transition()
@@ -272,33 +271,7 @@
 	        .text("Finish Line")
 	        .attr("transform","translate("+((box.width/2)-100)+","+(box.height-box.topmargin-80)+")")
 	
-	    $('.stepper li').on('click',function(){
-	        $('.stepper li').removeClass('active')
-	        $(this).addClass('active')
-	    })
-	
 	    var stepperpos = 1;
-	
-	    $('.progress-step').on('click',function(){
-	        $('.steps .progress-step').removeClass('progress-active')
-	        $(this).addClass('progress-active')
-	        var currentstep = $(this).attr('id').split('step')[1]
-	        if (stepperpos>=1){
-	            $('#prev').removeClass('inactive')
-	        } 
-	        if (stepperpos<steps.length-1){
-	            $('#next').removeClass('inactive')
-	        } else {
-	            $('#next').addClass('inactive')
-	        }
-	        if (stepperpos==2){
-	            $('#prev').addClass('inactive')
-	        } 
-	        if (stepperpos<=steps.length){
-	            $('#next').removeClass('inactive')
-	        }
-	        stepperpos = changeSlide(currentstep-1)
-	    })
 	
 	    $('#next').on('click',function(){
 	        if (stepperpos>=1){
@@ -307,7 +280,8 @@
 	        if (stepperpos<steps.length-1){
 	            $('#next').removeClass('inactive')
 	        } else {
-	            $('#next').addClass('inactive')
+	            $('#next,#prev').addClass('inactive')
+	            $('#replay').removeClass('inactive')
 	        }
 	        stepperpos = changeSlide(stepperpos)
 	        
@@ -321,6 +295,13 @@
 	            $('#next').removeClass('inactive')
 	        }
 	        stepperpos = changeSlide(stepperpos-2)
+	    })
+	
+	    $('#replay').on('click',function(){
+	        stepperpos = 0
+	        stepperpos = changeSlide(0)
+	        $('#next').removeClass('inactive')
+	            $('#replay').addClass('inactive')
 	
 	    })
 	
@@ -353,13 +334,13 @@
 	
 	    // Slide 1
 	    function firstSlide(timedelay){
+	        updateText(1)
 	        $('.a-step').remove()
-	        hideRefLine()
 	        // arrow for Jamaica
 	        var arrowright = chart.append("g")
-	                            .attr('class','a-step arrowright arrow')
-	                            .attr('id','step1-arrow')
-	                            .style("opacity", 0)
+	            .attr('class','a-step arrowright arrow')
+	            .attr('id','step1-arrow')
+	            .style("opacity", 0)
 	
 	        var labelLineR = arrowright.append("line")
 	            .attr("x1", (x("Jamaica") + x.bandwidth()))
@@ -503,15 +484,14 @@
 	
 	    // Slide 3
 	    function thirdSlide(){
-	        resetOpacity()
-	        hideRefLine()
-	        d3.selectAll('.arrow')
+	        d3.selectAll('.arrow,.refline')
 	            .remove()
 	        
 	        // highlight Anil Kumar and Osain Bolt
 	        d3.selectAll('.bar')
 	            .transition()
 	            .style("fill",function(e){if (e.Country == 'India' || e.Country=='Jamaica'){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
+	            .style('opacity',1)
 	            .duration(1000)
 	
 	        // arrow for India
@@ -663,78 +643,16 @@
 	                if (parseFloat(e.pos_at_max_dist)>parseFloat(India.pos_at_max_dist)){
 	                    return 0.4
 	                } else if (parseFloat(e.pos_at_max_dist)==parseFloat(India.pos_at_max_dist)) {
-	                    return 1
+	                    if (e.Country == 'India'){
+	                        return 1
+	                    } else {
+	                        return 0.4
+	                    }
 	                } else {
 	                    return 1
 	                }
 	            })
-	            .duration(1000)
-	
-	        var arrowleft = chart.append("g")
-	                            .attr('class','shadow arrowleft arrow a-step')
-	
-	        var labelLine = arrowleft.append("line")
-	            .attr("x1", x("India"))
-	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("India") - arrowlength+x.bandwidth())
-	            .attr("y2", box.height * 0.75)
-	            .attr("stroke-width",1)
-	            .attr("stroke", "#2D2D2D");
-	
-	        var right = arrowleft.append("line")
-	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("India") - arrowlength+x.bandwidth())
-	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("India") - arrowlength+x.bandwidth() + 8)
-	            .attr("stroke-width",1)
-	            .attr("stroke", "#2D2D2D");
-	
-	        var left = arrowleft.append("line")
-	            .attr("x1", right.attr("x1"))
-	            .attr("y1", right.attr("y1"))
-	            .attr("x2", right.attr("x2"))
-	            .attr("y2", right.attr("y2")-10)
-	            .attr("stroke-width",1)
-	            .attr("stroke", "#2D2D2D");
-	
-	        var arrowleft = chart.append("g")
-	                            .attr('class','arrowleft arrow a-step')
-	
-	        var labelLine = arrowleft.append("line")
-	            .attr("x1", x("India"))
-	            .attr("y1", box.height * 0.75)
-	            .attr("x2", x("India") - arrowlength+x.bandwidth())
-	            .attr("y2", box.height * 0.75)
-	            .attr("stroke-width",1)
-	            .attr("stroke", "#2D2D2D");
-	
-	        var right = arrowleft.append("line")
-	            .attr("y1", box.height * 0.75)
-	            .attr("x1", x("India") - arrowlength+x.bandwidth())
-	            .attr("y2", box.height * 0.75 + 5)
-	            .attr("x2", x("India") - arrowlength+x.bandwidth() + 8)
-	            .attr("stroke-width",1)
-	            .attr("stroke", "#2D2D2D");
-	
-	        var left = arrowleft.append("line")
-	            .attr("x1", right.attr("x1"))
-	            .attr("y1", right.attr("y1"))
-	            .attr("x2", right.attr("x2"))
-	            .attr("y2", right.attr("y2")-10)
-	            .attr("stroke-width",1)
-	            .attr("stroke", "#2D2D2D");
-	
-	        arrowleft.append("text")
-	                .attr("class","label-text left-arrow-text shadow")
-	                .text("India")
-	                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
-	                .attr('st')
-	
-	        var leftArrowtext = arrowleft.append("text")
-	                                .attr("class","label-text left-arrow-text")
-	                                .text("India")
-	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
-	                                .attr('st')                    
+	            .duration(1000)                
 	        
 	    }
 	
@@ -743,6 +661,7 @@
 	    function fifthSlide(){
 	        resetOpacity()
 	        showRefLine()
+	        $('.arrow').remove()
 	        d3.selectAll('.bar')
 	            .transition()
 	            .style("fill",function(e){
@@ -755,7 +674,11 @@
 	                if ( parseFloat(e.pos_at_max_dist) < parseFloat(India.pos_at_max_dist) ){
 	                    return 0.4
 	                } else if (parseFloat(e.pos_at_max_dist)==parseFloat(India.pos_at_max_dist)) {
-	                    return 1
+	                    if (e.Country == 'India'){
+	                                        return 1
+	                                    } else {
+	                                        return 0.4
+	                                    }
 	                } else {
 	                    return 1
 	                }
@@ -768,64 +691,68 @@
 	    function sixthSlide(){
 	        resetOpacity()
 	        $('.arrow').remove()
-	        d3.selectAll('.bar')
-	            .transition()
-	            .style("fill",function(e){if (e.Continent=="Asia"){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
-	            .style('opacity',1)
-	            .duration(1000)
-	    }
+	        // arrow for Qatar
+	        var arrowleft = chart.append("g")
+	                            .attr('class','arrowleft arrow a-step')
+	                            .style("opacity", 0)
 	
-	    // Slide 7
-	    function seventhSlide(){
-	        resetOpacity()
-	        d3.selectAll('.bar')
-	            .transition()
-	            .style("fill",function(e){
-	                if (_.contains(['India','Pakistan','Nepal','Bangladesh','Afghanistan','Maldives','Bhutan'], e.Country)){
-	                    return colorRange(e['Continent'])
-	                } else {
-	                    return "#E5E5E5"
-	                }
-	            })
-	            .duration(1000)
-	    }
+	        var labelLine = arrowleft.append("line")
+	            .attr("x1", x("Qatar"))
+	            .attr("y1", y(95.5))
+	            .attr("x2", x("Qatar") - arrowlength+(x.bandwidth()*2))
+	            .attr("y2", y(95.5))
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
 	
-	    // Slide 8
+	        var right = arrowleft.append("line")
+	            .attr("y1", y(95.5))
+	            .attr("x1", x("Qatar") - arrowlength+(x.bandwidth()*2))
+	            .attr("y2", y(95.5) + 5)
+	            .attr("x2", x("Qatar") - arrowlength+(x.bandwidth()*2) + 8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
 	
-	    function eighthSlide(){
-	        $('.arrow').remove()
-	        resetOpacity()
-	        d3.selectAll('.bar')
-	            .transition()
-	            .style('fill',function(e){
-	                if (e.Country=='Bhutan'){
-	                    return colorRange(e['Continent'])
-	                } else {
-	                    return '#E5E5E5'
-	                }
-	            })
-	            .duration(1000)
-	         // arrow for Bhutan
-	        var bhutan = _.findWhere(men,{Country:'Bhutan'})
+	        var left = arrowleft.append("line")
+	            .attr("x1", right.attr("x1"))
+	            .attr("y1", right.attr("y1"))
+	            .attr("x2", right.attr("x2"))
+	            .attr("y2", right.attr("y2")-10)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftArrowtextshadow = arrowleft.append("text")
+	                                .attr("class","label-text shadow left-arrow-text")
+	                                .text("Qatar")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	        
+	        var leftArrowtext = arrowleft.append("text")
+	                                .attr("class","label-text left-arrow-text")
+	                                .text("Qatar")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	
+	        // arrow for China
+	
 	        var arrowright = chart.append("g")
 	                            .attr('class','arrowright arrow a-step')
 	                            .style("opacity", 0)
 	
 	        var labelLineR = arrowright.append("line")
-	            .attr("x1", (x("Bhutan") + x.bandwidth()))
-	            .attr("y1", y(bhutan.pos_at_max_dist-1))
-	            .attr("x2", x("Bhutan") + arrowlength)
-	            .attr("y2", y(bhutan.pos_at_max_dist-1))
+	            .attr("x1", (x("China") + x.bandwidth()))
+	            .attr("y1", y(95.5))
+	            .attr("x2", x("China") + arrowlength)
+	            .attr("y2", y(95.5))
 	            .attr("stroke-width", 1)
-	            .attr("stroke", "#2D2D2D");
+	            .attr("stroke", "#2D2D2D")
+	            .attr('class','desktoplabel');
 	
 	        var rightR = arrowright.append("line")
-	            .attr("y1", y(bhutan.pos_at_max_dist-1))
-	            .attr("x1", x("Bhutan") + arrowlength)
-	            .attr("y2", y(bhutan.pos_at_max_dist-1) + 5)
-	            .attr("x2", x("Bhutan") +( arrowlength - 8))
+	            .attr("y1", y(95.5))
+	            .attr("x1", x("China") + arrowlength)
+	            .attr("y2", y(95.5)+ 5)
+	            .attr("x2", x("China") +( arrowlength - 8))
 	            .attr("stroke-width", 1)
-	            .attr("stroke", "#2D2D2D");
+	            .attr("stroke", "#2D2D2D")
+	            .attr('class','desktoplabel');
 	
 	        var leftR = arrowright.append("line")
 	            .attr("x1", rightR.attr("x1"))
@@ -833,13 +760,191 @@
 	            .attr("x2", rightR.attr("x2"))
 	            .attr("y2", rightR.attr("y2") - 10)
 	            .attr("stroke-width", 1)
-	            .attr("stroke", "#2D2D2D");
+	            .attr("stroke", "#2D2D2D")
+	            .attr('class','desktoplabel');
+	
+	        var rightArrowTextshadow = arrowright.append("text")
+	                                .attr("class","label-text shadow desktoplabel right-arrow-text")
+	                                .text("China")
+	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
 	
 	         var rightArrowText = arrowright.append("text")
-	                                .attr("class","label-text right-arrow-text")
-	                                .text("Bhutan")
+	                                .attr("class","label-text desktoplabel right-arrow-text")
+	                                .text("China")
 	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
+	
+	        arrowleft.transition()
+	                .style('opacity',1)
+	                .duration(1000)
+	
 	        arrowright.transition()
+	                .style('opacity',1)
+	                .duration(1000)
+	
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style("fill",function(e){if (e.Continent=="Asia"){return colorRange(e['Continent'])} else {return "#E5E5E5"}})
+	            .style('opacity',1)
+	            .duration(1000)
+	
+	
+	    }
+	
+	    // Slide 7
+	    function seventhSlide(){
+	        $('.arrow').remove()
+	        resetOpacity()
+	        showRefLine()
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style("fill",function(e){
+	                if (_.contains(['India','Pakistan','Nepal','Bangladesh','Afghanistan','Maldives','Bhutan','Sri Lanka'], e.Country)){
+	                    return colorRange(e['Continent'])
+	                } else {
+	                    return "#E5E5E5"
+	                }
+	            })
+	            .duration(1000)
+	
+	        // arrow for Pakistan
+	        var arrowleft = chart.append("g")
+	                            .attr('class','arrowleft arrow a-step')
+	                            .style("opacity", 0)
+	
+	        var labelLine = arrowleft.append("line")
+	            .attr("x1", x("Pakistan"))
+	            .attr("y1", box.height * 0.7)
+	            .attr("x2", x("Pakistan") - arrowlength-(x.bandwidth()*2))
+	            .attr("y2", box.height * 0.7)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var right = arrowleft.append("line")
+	            .attr("y1", box.height * 0.7)
+	            .attr("x1", x("Pakistan") - arrowlength-(x.bandwidth()*2))
+	            .attr("y2", box.height * 0.7 + 5)
+	            .attr("x2", x("Pakistan") - arrowlength-(x.bandwidth()*2) + 8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var left = arrowleft.append("line")
+	            .attr("x1", right.attr("x1"))
+	            .attr("y1", right.attr("y1"))
+	            .attr("x2", right.attr("x2"))
+	            .attr("y2", right.attr("y2")-10)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftArrowtextshadow = arrowleft.append("text")
+	                                .attr("class","label-text shadow left-arrow-text")
+	                                .text("Pakistan")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-60) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	        var leftArrowtextshadow = arrowleft.append("text")
+	                                .attr("class","label-text left-arrow-text")
+	                                .text("Pakistan")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-60) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
+	
+	        arrowleft.transition()
+	                .style('opacity',1)
+	
+	        // arrow for Pakistan
+	        var arrowleft1 = chart.append("g")
+	                            .attr('class','arrowleft arrow a-step')
+	                            .style("opacity", 0)
+	
+	        var labelLine1 = arrowleft1.append("line")
+	            .attr("x1", x("Sri Lanka"))
+	            .attr("y1", y(89))
+	            .attr("x2", x("Sri Lanka") - arrowlength-(x.bandwidth()*2))
+	            .attr("y2", y(89))
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var right1 = arrowleft1.append("line")
+	            .attr("y1", y(89))
+	            .attr("x1", x("Sri Lanka") - arrowlength-(x.bandwidth()*2))
+	            .attr("y2", y(89) + 5)
+	            .attr("x2", x("Sri Lanka") - arrowlength-(x.bandwidth()*2) + 8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var left1 = arrowleft1.append("line")
+	            .attr("x1", right1.attr("x1"))
+	            .attr("y1", right1.attr("y1"))
+	            .attr("x2", right1.attr("x2"))
+	            .attr("y2", right1.attr("y2")-10)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftArrowtextshadow1 = arrowleft1.append("text")
+	                                .attr("class","label-text shadow left-arrow-text")
+	                                .text("Sri Lanka")
+	                                .attr('transform','translate('+ (labelLine1.attr("x2")-60) +","+ (parseInt(labelLine1.attr("y1"))+5) +")")
+	        var leftArrowtext1 = arrowleft1.append("text")
+	                                .attr("class","label-text left-arrow-text")
+	                                .text("Sri Lanka")
+	                                .attr('transform','translate('+ (labelLine1.attr("x2")-60) +","+ (parseInt(labelLine1.attr("y1"))+5) +")")
+	
+	            arrowleft1.transition()
+	                        .style('opacity',1)
+	                        .duration(1000)
+	    }
+	
+	    // Slide 8
+	
+	    function eighthSlide(){
+	        $('.arrow,.difference').remove()
+	        resetOpacity()
+	        hideRefLine()
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style('fill',function(e){
+	                if (e.Country=='Tuvalu'){
+	                    return colorRange(e['Continent'])
+	                } else {
+	                    return '#E5E5E5'
+	                }
+	            })
+	            .duration(1000)
+	
+	        // arrow for Tuvalu
+	        var tuvalu = _.findWhere(men,{Country:'Tuvalu'})
+	
+	        var arrowleft = chart.append("g")
+	                            .attr('class','arrowleft arrow a-step')
+	                            .attr('id','step2-arrow')
+	                            .style("opacity", 0)
+	
+	        var labelLine = arrowleft.append("line")
+	            .attr("x1", x("Tuvalu"))
+	            .attr("y1", y(82))
+	            .attr("x2", x("Tuvalu") - arrowlength+x.bandwidth())
+	            .attr("y2", y(82))
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var right = arrowleft.append("line")
+	            .attr("y1", y(82))
+	            .attr("x1", x("Tuvalu") - arrowlength+x.bandwidth())
+	            .attr("y2", y(82) + 5)
+	            .attr("x2", x("Tuvalu") - arrowlength+x.bandwidth() + 8)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var left = arrowleft.append("line")
+	            .attr("x1", right.attr("x1"))
+	            .attr("y1", right.attr("y1"))
+	            .attr("x2", right.attr("x2"))
+	            .attr("y2", right.attr("y2")-10)
+	            .attr("stroke-width",1)
+	            .attr("stroke", "#2D2D2D");
+	
+	        var leftArrowtext = arrowleft.append("text")
+	                                .attr("class","label-text left-arrow-text")
+	                                .text("Tuvalu")
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-55-(x.bandwidth()*2)) +","+ (parseInt(labelLine.attr("y1")              )+5) +")")
+	        
+	        arrowleft.transition()
 	                    .style('opacity',1)
 	                    .duration(1000)
 	    }
@@ -847,12 +952,11 @@
 	    // Slide 9
 	
 	    function ninthSlide(){
-	        $('.arrow').remove()
 	        resetOpacity()
 	        d3.selectAll('.bar')
 	            .transition()
 	            .style('fill',function(e){
-	                if (e.Country=='Bhutan' || e.Country=='Jamaica'){
+	                if (e.Country=='Tuvalu' || e.Country=='Jamaica'){
 	                    return colorRange(e['Continent'])
 	                } else {
 	                    return '#E5E5E5'
@@ -860,25 +964,25 @@
 	            })
 	            .duration(1000)
 	
-	         // arrow for Bhutan
-	         var bhutan = _.findWhere(men,{Country:'Bhutan'})
+	         // arrow for Tuvalu
+	         var tuvalu = _.findWhere(men,{Country:'Tuvalu'})
 	        var arrowright = chart.append("g")
 	                            .attr('class','arrowright arrow a-step')
 	                            .style("opacity", 0)
 	
 	        var labelLineR = arrowright.append("line")
-	            .attr("x1", (x("Bhutan") + x.bandwidth()))
-	            .attr("y1", y(bhutan.pos_at_max_dist-1))
-	            .attr("x2", x("Bhutan") + arrowlength)
-	            .attr("y2", y(bhutan.pos_at_max_dist-1))
+	            .attr("x1", (x("Tuvalu") + x.bandwidth()))
+	            .attr("y1", y(tuvalu.pos_at_max_dist-1))
+	            .attr("x2", x("Tuvalu") + arrowlength)
+	            .attr("y2", y(tuvalu.pos_at_max_dist-1))
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
 	        var rightR = arrowright.append("line")
-	            .attr("y1", y(bhutan.pos_at_max_dist-1))
-	            .attr("x1", x("Bhutan") + arrowlength)
-	            .attr("y2", y(bhutan.pos_at_max_dist-1) + 5)
-	            .attr("x2", x("Bhutan") +( arrowlength - 8))
+	            .attr("y1", y(tuvalu.pos_at_max_dist-1))
+	            .attr("x1", x("Tuvalu") + arrowlength)
+	            .attr("y2", y(tuvalu.pos_at_max_dist-1) + 5)
+	            .attr("x2", x("Tuvalu") +( arrowlength - 8))
 	            .attr("stroke-width", 1)
 	            .attr("stroke", "#2D2D2D");
 	
@@ -892,24 +996,26 @@
 	
 	         var rightArrowText = arrowright.append("text")
 	                                .attr("class","label-text right-arrow-text")
-	                                .text("Bhutan")
+	                                .text("Tuvalu")
 	                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
 	        
-	        var arrowleft = chart.append("g")
-	                        .attr('class','arrowleft arrow a-step')
+	     var arrowleft = chart.append("g")
+	                            .attr('class','arrowleft arrow a-step')
+	                            .attr('id','step2-arrow')
+	                            .style("opacity", 0)
 	
 	        var labelLine = arrowleft.append("line")
 	            .attr("x1", x("Jamaica"))
-	            .attr("y1", box.height * 0.8)
+	            .attr("y1", y(94))
 	            .attr("x2", x("Jamaica") - arrowlength+x.bandwidth())
-	            .attr("y2", box.height * 0.8)
+	            .attr("y2", y(94))
 	            .attr("stroke-width",1)
 	            .attr("stroke", "#2D2D2D");
 	
 	        var right = arrowleft.append("line")
-	            .attr("y1", box.height * 0.8)
+	            .attr("y1", y(94))
 	            .attr("x1", x("Jamaica") - arrowlength+x.bandwidth())
-	            .attr("y2", box.height * 0.8 + 5)
+	            .attr("y2", y(94) + 5)
 	            .attr("x2", x("Jamaica") - arrowlength+x.bandwidth() + 8)
 	            .attr("stroke-width",1)
 	            .attr("stroke", "#2D2D2D");
@@ -922,19 +1028,13 @@
 	            .attr("stroke-width",1)
 	            .attr("stroke", "#2D2D2D");
 	
-	        arrowleft.append("text")
-	                .attr("class","label-text left-arrow-text shadow")
-	                .text("Jamaica")
-	                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
-	                .attr('st')
-	
 	        var leftArrowtext = arrowleft.append("text")
 	                                .attr("class","label-text left-arrow-text")
 	                                .text("Jamaica")
-	                                .attr('transform','translate('+ (labelLine.attr("x2")-45) +","+ (parseInt(labelLine.attr("y1"))+5) +")")
-	                                .attr('st')  
+	                                .attr('transform','translate('+ (labelLine.attr("x2")-55-(x.bandwidth()*2)) +","+ (parseInt(labelLine.attr("y1")              )+5) +")")
+	        
 	
-	        arrowright.transition()
+	        arrowleft.transition()
 	                    .style('opacity',1)
 	                    .duration(1000)
 	
@@ -946,9 +1046,9 @@
 	            .style('opacity',0)
 	            .append('line')
 	            .attr('class','difference-l')
-	            .attr("x1", (x("Bhutan")-(x.bandwidth())*2))
-	            .attr("y1", y(bhutan.pos_at_max_dist))
-	            .attr("x2", (x("Bhutan")-(x.bandwidth())*2))
+	            .attr("x1", (x("Tuvalu")-(x.bandwidth())*2))
+	            .attr("y1", y(tuvalu.pos_at_max_dist))
+	            .attr("x2", (x("Tuvalu")-(x.bandwidth())*2))
 	            .attr("y2", y(100))
 	            .style('stroke','black')
 	            .style('stroke-width','1px')
@@ -960,10 +1060,10 @@
 	
 	        d3.select('.difference').append('line')
 	            .attr('class','difference-l')
-	            .attr("x1", (x("Bhutan")-(x.bandwidth())*2))
-	            .attr("y1", y(bhutan.pos_at_max_dist))
-	            .attr("x2", (x("Bhutan")))
-	            .attr("y2", y(bhutan.pos_at_max_dist))
+	            .attr("x1", (x("Tuvalu")-(x.bandwidth())*2))
+	            .attr("y1", y(tuvalu.pos_at_max_dist))
+	            .attr("x2", (x("Tuvalu")))
+	            .attr("y2", y(tuvalu.pos_at_max_dist))
 	            .style('stroke','black')
 	            .style('stroke-width','1px')
 	            .style('opacity',0)
@@ -974,9 +1074,9 @@
 	
 	        d3.select('.difference').append('line')
 	            .attr('class','difference-l')
-	            .attr("x1", (x("Bhutan")-(x.bandwidth())*2))
+	            .attr("x1", (x("Tuvalu")-(x.bandwidth())*2))
 	            .attr("y1", y(100))
-	            .attr("x2", (x("Bhutan")))
+	            .attr("x2", (x("Tuvalu")))
 	            .attr("y2", y(100))
 	            .style('stroke','black')
 	            .style('stroke-width','1px')
@@ -986,32 +1086,58 @@
 	            .style("opacity",1)
 	            .duration(1000)
 	
-	        var diff = round((100 - bhutan.pos_at_max_dist),2)
+	        var diff = round((100 - tuvalu.pos_at_max_dist),2)
 	
 	        d3.select('.difference')
 	            .append('text')
 	            .text(diff+"m")
 	            .attr("class","label-text")
-	            .attr('transform','translate(' + ( x("Bhutan")-(x.bandwidth()*7)-40) + "," + y(parseFloat(bhutan.pos_at_max_dist)+parseFloat(diff/2)) +")")
-	
+	            .attr('transform','translate(' + ( x("Tuvalu")-(x.bandwidth()*7)-45) + "," + y(parseFloat(tuvalu.pos_at_max_dist)+parseFloat(diff/2)) +")")
 	    }
 	
+	    function tenthSlide(){
+	        $('.text').html(share)
+	        $('.arrow, .difference').remove()
+	        d3.selectAll('.bar')
+	            .transition()
+	            .style('fill',function(e){
+	                return colorRange(e['Continent'])
+	            })
+	            .duration(1000)
+	    }
 	
 	    // MISC
 	
 	    function appendRefLine(val){
 	        var refline = chart.append('g')
+	                            .attr('class', 'refline')
 	
 	        refline.append('line')
-	                        .attr('class', 'refline')
 	                        .attr("y1", y(val))
 	                        .attr("x1", 0)
 	                        .attr("y2", y(val))
 	                        .attr("x2", box.width)
 	
 	        refline.append('text')
+	                .attr('class','desktoplabel label-text shadow')
 	                .text('India')
-	                .attr('transform','translate('+ (box.width-80) +","+ y(val) +")")
+	                .attr('transform','translate('+ (box.width-150) +","+ y(val-0.5) +")")
+	
+	        refline.append('text')
+	                .attr('class','desktoplabel label-text')
+	                .text('India')
+	                .attr('transform','translate('+ (box.width-150) +","+ y(val-0.5) +")")
+	
+	        var refval = parseFloat(val)+0.2
+	        refline.append('text')
+	                .attr('class','mobilelabel label-text shadow')
+	                .text('India')
+	                .attr('transform','translate('+ (-25) +","+ y(refval) +")")
+	
+	        refline.append('text')
+	                .attr('class','mobilelabel label-text')
+	                .text('India')
+	                .attr('transform','translate('+ (-25) +","+ y(refval) +")")
 	
 	    }
 	
@@ -1036,25 +1162,30 @@
 	            eighthSlide()
 	        } else if (pos == 9){
 	            ninthSlide()
+	        } else if (pos == 10){
+	            tenthSlide()
 	        }
 	        updateText(pos)
 	        return pos
 	    }
 	
+	    $('.steps').width((100/steps.length)*1+"%")
+	
+	
 	    function updateText(pos){
-	        d3.select('.stepper-container .text')
-	            .transition()
-	            .delay(100)
-	            .style('opacity',0)
-	            .duration(300)
-	            .transition()
-	            .delay(100)
-	            .style('opacity',1)
-	            .duration(300)
-	            setTimeout(function(){$('.stepper-container .text').html(steps[pos-1].narrative)},450)
-	        
-	        $('.steps .progress-step').removeClass('progress-active')
-	        $('#step'+pos).addClass('progress-active')
+	        if (pos!=steps.length){
+	            d3.select('.stepper-container .text')
+	                .transition()
+	                .delay(100)
+	                .style('opacity',0)
+	                .duration(300)
+	                .transition()
+	                .delay(100)
+	                .style('opacity',1)
+	                .duration(300)
+	                setTimeout(function(){$('.stepper-container .text').html(steps[pos-1].narrative)},450)
+	            }
+	            $('.steps').width((100/steps.length)*pos+"%")
 	    }
 	
 	    function resetOpacity(){
@@ -1091,14 +1222,14 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// https://d3js.org Version 4.1.1. Copyright 2016 Mike Bostock.
+	// https://d3js.org Version 4.2.2. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
 	   true ? factory(exports) :
 	  typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	  (factory((global.d3 = global.d3 || {})));
-	}(this, function (exports) { 'use strict';
+	}(this, (function (exports) { 'use strict';
 	
-	  var version = "4.1.1";
+	  var version = "4.2.2";
 	
 	  function ascending(a, b) {
 	    return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
@@ -6720,9 +6851,6 @@
 	  }
 	
 	  var locale;
-	  exports.format;
-	  exports.formatPrefix;
-	
 	  defaultLocale({
 	    decimal: ".",
 	    thousands: ",",
@@ -7278,11 +7406,6 @@
 	  }
 	
 	  var locale$1;
-	  exports.timeFormat;
-	  exports.timeParse;
-	  exports.utcFormat;
-	  exports.utcParse;
-	
 	  defaultLocale$1({
 	    dateTime: "%x, %X",
 	    date: "%-m/%-d/%Y",
@@ -9915,9 +10038,10 @@
 	  }
 	
 	  function center(scale) {
-	    var width = scale.bandwidth() / 2;
+	    var offset = scale.bandwidth() / 2;
+	    if (scale.round()) offset = Math.round(offset);
 	    return function(d) {
-	      return scale(d) + width;
+	      return scale(d) + offset;
 	    };
 	  }
 	
@@ -9968,7 +10092,7 @@
 	          .attr("fill", "#000")
 	          .attr(x, k * spacing)
 	          .attr(y, 0.5)
-	          .attr("dy", orient === top ? "0em" : orient === bottom ? ".71em" : ".32em"));
+	          .attr("dy", orient === top ? "0em" : orient === bottom ? "0.71em" : "0.32em"));
 	
 	      if (context !== selection) {
 	        path = path.transition(context);
@@ -14387,7 +14511,7 @@
 	    stream.polygonEnd();
 	  }
 	
-	  function stream(object, stream) {
+	  function geoStream(object, stream) {
 	    if (object && streamObjectType.hasOwnProperty(object.type)) {
 	      streamObjectType[object.type](object, stream);
 	    } else {
@@ -14395,9 +14519,9 @@
 	    }
 	  }
 	
-	  var areaRingSum;
+	  var areaRingSum = adder();
 	
-	  var areaSum;
+	  var areaSum = adder();
 	  var lambda00;
 	  var phi00;
 	  var lambda0;
@@ -14459,9 +14583,8 @@
 	  }
 	
 	  function area$2(object) {
-	    if (areaSum) areaSum.reset();
-	    else areaSum = adder(), areaRingSum = adder();
-	    stream(object, areaStream);
+	    areaSum.reset();
+	    geoStream(object, areaStream);
 	    return areaSum * 2;
 	  }
 	
@@ -14505,7 +14628,7 @@
 	var   lambda00$1;
 	var   phi00$1;
 	  var p0;
-	  var deltaSum;
+	  var deltaSum = adder();
 	  var ranges;
 	var   range$1;
 	  var boundsStream = {
@@ -14635,11 +14758,9 @@
 	  function bounds(feature) {
 	    var i, n, a, b, merged, deltaMax, delta;
 	
-	    if (deltaSum) deltaSum.reset();
-	    else deltaSum = adder();
 	    phi1 = lambda1 = -(lambda0$1 = phi0 = Infinity);
 	    ranges = [];
-	    stream(feature, boundsStream);
+	    geoStream(feature, boundsStream);
 	
 	    // First, sort ranges by their minimum longitudes.
 	    if (n = ranges.length) {
@@ -14800,7 +14921,7 @@
 	    X0 = Y0 = Z0 =
 	    X1 = Y1 = Z1 =
 	    X2 = Y2 = Z2 = 0;
-	    stream(object, centroidStream);
+	    geoStream(object, centroidStream);
 	
 	    var x = X2,
 	        y = Y2,
@@ -15350,7 +15471,7 @@
 	    };
 	  }
 	
-	  var lengthSum;
+	  var lengthSum = adder();
 	var   lambda0$2;
 	var   sinPhi0$1;
 	var   cosPhi0$1;
@@ -15393,9 +15514,8 @@
 	  }
 	
 	  function length$2(object) {
-	    if (lengthSum) lengthSum.reset();
-	    else lengthSum = adder();
-	    stream(object, lengthStream);
+	    lengthSum.reset();
+	    geoStream(object, lengthStream);
 	    return +lengthSum;
 	  }
 	
@@ -15827,23 +15947,23 @@
 	    function path(object) {
 	      if (object) {
 	        if (typeof pointRadius === "function") contextStream.pointRadius(+pointRadius.apply(this, arguments));
-	        stream(object, projectionStream(contextStream));
+	        geoStream(object, projectionStream(contextStream));
 	      }
 	      return contextStream.result();
 	    }
 	
 	    path.area = function(object) {
-	      stream(object, projectionStream(areaStream$1));
+	      geoStream(object, projectionStream(areaStream$1));
 	      return areaStream$1.result();
 	    };
 	
 	    path.bounds = function(object) {
-	      stream(object, projectionStream(boundsStream$1));
+	      geoStream(object, projectionStream(boundsStream$1));
 	      return boundsStream$1.result();
 	    };
 	
 	    path.centroid = function(object) {
-	      stream(object, projectionStream(centroidStream$1));
+	      geoStream(object, projectionStream(centroidStream$1));
 	      return centroidStream$1.result();
 	    };
 	
@@ -15875,6 +15995,8 @@
 	        normal = [sin$1(lambda), -cos$1(lambda), 0],
 	        angle = 0,
 	        winding = 0;
+	
+	    sum$2.reset();
 	
 	    for (var i = 0, n = polygon.length; i < n; ++i) {
 	      if (!(m = (ring = polygon[i]).length)) continue;
@@ -15927,9 +16049,7 @@
 	    // from the point to the South pole.  If it is zero, then the point is the
 	    // same side as the South pole.
 	
-	    var contains = (angle < -epsilon$4 || angle < epsilon$4 && sum$2 < -epsilon$4) ^ (winding & 1);
-	    sum$2.reset();
-	    return contains;
+	    return (angle < -epsilon$4 || angle < epsilon$4 && sum$2 < -epsilon$4) ^ (winding & 1);
 	  }
 	
 	  function clip(pointVisible, clipLine, interpolate, start) {
@@ -16356,6 +16476,43 @@
 	    polygonEnd: function() { this.stream.polygonEnd(); }
 	  };
 	
+	  function fit(project, extent, object) {
+	    var w = extent[1][0] - extent[0][0],
+	        h = extent[1][1] - extent[0][1],
+	        clip = project.clipExtent && project.clipExtent();
+	
+	    project
+	        .scale(150)
+	        .translate([0, 0]);
+	
+	    if (clip != null) project.clipExtent(null);
+	
+	    geoStream(object, project.stream(boundsStream$1));
+	
+	    var b = boundsStream$1.result(),
+	        k = Math.min(w / (b[1][0] - b[0][0]), h / (b[1][1] - b[0][1])),
+	        x = +extent[0][0] + (w - k * (b[1][0] + b[0][0])) / 2,
+	        y = +extent[0][1] + (h - k * (b[1][1] + b[0][1])) / 2;
+	
+	    if (clip != null) project.clipExtent(clip);
+	
+	    return project
+	        .scale(k * 150)
+	        .translate([x, y]);
+	  }
+	
+	  function fitSize(project) {
+	    return function(size, object) {
+	      return fit(project, [[0, 0], size], object);
+	    };
+	  }
+	
+	  function fitExtent(project) {
+	    return function(extent, object) {
+	      return fit(project, extent, object);
+	    };
+	  }
+	
 	  var maxDepth = 16;
 	  var cosMinDistance = cos$1(30 * radians);
 	  // cos(minimum angular distance)
@@ -16524,6 +16681,10 @@
 	      return arguments.length ? (projectResample = resample(projectTransform, delta2 = _ * _), reset()) : sqrt$1(delta2);
 	    };
 	
+	    projection.fitExtent = fitExtent(projection);
+	
+	    projection.fitSize = fitSize(projection);
+	
 	    function recenter() {
 	      projectRotate = compose(rotate = rotateRadians(deltaLambda, deltaPhi, deltaGamma), project);
 	      var center = project(lambda, phi);
@@ -16673,6 +16834,10 @@
 	
 	      return albersUsa;
 	    };
+	
+	    albersUsa.fitExtent = fitExtent(albersUsa);
+	
+	    albersUsa.fitSize = fitSize(albersUsa);
 	
 	    return albersUsa.scale(1070);
 	  }
@@ -16872,7 +17037,7 @@
 	  }
 	
 	  stereographicRaw.invert = azimuthalInvert(function(z) {
-	    return 2 + atan(z);
+	    return 2 * atan(z);
 	  });
 	
 	  function stereographic() {
@@ -17277,14 +17442,14 @@
 	  exports.geoRotation = rotation;
 	  exports.geoStereographic = stereographic;
 	  exports.geoStereographicRaw = stereographicRaw;
-	  exports.geoStream = stream;
+	  exports.geoStream = geoStream;
 	  exports.geoTransform = transform$1;
 	  exports.geoTransverseMercator = transverseMercator;
 	  exports.geoTransverseMercatorRaw = transverseMercatorRaw;
 	
 	  Object.defineProperty(exports, '__esModule', { value: true });
 	
-	}));
+	})));
 
 /***/ },
 /* 4 */

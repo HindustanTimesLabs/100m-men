@@ -33,7 +33,7 @@ var steps = [
         'narrative':'Usain Bolt is still the fastest human. Ever. His current record: <b>9.58 seconds</b> in 2009.'
     },
     {
-        'narrative':' When Bolt crosses the finish line, the second fastest man &mdash; America’s Tyson Gay &mdash; is <b>more than a meter</b> behind. That’s about the length of a cricket bat.'
+        'narrative':' When Bolt crosses the finish line, the second fastest man - America’s Tyson Gay - is <b>more than a meter</b> behind. That’s about the length of a cricket bat.'
     },
     {
         'narrative':'India\'s Amiya Kumar Mallick is <b>6.63 meters</b> behind. At <b>10.26 seconds</b>, he is <b>six-tenths of a second</b> slower than Bolt. That’s how long it takes to blink twice.'
@@ -51,10 +51,10 @@ var steps = [
         'narrative':'In South Asia, <span class = "india">India</span> and Sri Lanka are the <b>fastest</b>. They are neck and neck.'
     },
     {
-        'narrative':'Tuvalu &mdash; a tiny Pacific island of 10,000 people &mdash; is the <b>slowest</b> in the world at <b>11.44 seconds.</b>'
+        'narrative':'Tuvalu - a tiny South Pacific island of 10, 000 people - is the <b>slowest</b> in the world at <b>11.44 seconds.</b>'
     },
     {
-        'narrative':'That gap &mdash; between Jamaica and Tuvalu &mdash; is <b>1.86 seconds.</b>'
+        'narrative':'That gap - between Jamaica and Tuvalu is <b>1.86 seconds.</b>'
     },
     {
         'narrative':''
@@ -72,7 +72,7 @@ var box = {
 var scrollAnimator = function(){
     $("html, body").animate(
         { scrollTop: ($('.legend').position().top)-($(window).height()*0.97)}
-        , 100/10.43841336 * 700, 'linear'
+        , 100/10.43841336 * 700, 'swing'
     );
 };
 
@@ -194,7 +194,8 @@ d3.csv("data/data.csv",function(error,men){
         d3.selectAll('.bar')
             .transition()
             .attr("height", function(d) { return y(d['pos_at_max_dist']); })
-            .duration(function(e){return e['pos_at_max_dist']/e['speed'] * 1000 }).ease(d3.easeLinear)
+            .duration(function(e){return e['pos_at_max_dist']/e['speed'] * 1000 })
+
             firstSlide((mintime*1000)+1000)
         d3.select('.stepper-container')
             .transition()
@@ -292,9 +293,9 @@ d3.csv("data/data.csv",function(error,men){
         $('.a-step').remove()
         // arrow for Jamaica
         var arrowright = chart.append("g")
-            .attr('class','a-step arrowright arrow')
-            .attr('id','step1-arrow')
-            .style("opacity", 0)
+                            .attr('class','a-step arrowright arrow')
+                            .attr('id','step1-arrow')
+                            .style("opacity", 0)
 
         var labelLineR = arrowright.append("line")
             .attr("x1", (x("Jamaica") + x.bandwidth()))
@@ -652,16 +653,16 @@ d3.csv("data/data.csv",function(error,men){
 
         var labelLine = arrowleft.append("line")
             .attr("x1", x("Qatar"))
-            .attr("y1", y(95.5))
+            .attr("y1", y(85))
             .attr("x2", x("Qatar") - arrowlength+(x.bandwidth()*2))
-            .attr("y2", y(95.5))
+            .attr("y2", y(85))
             .attr("stroke-width",1)
             .attr("stroke", "#2D2D2D");
 
         var right = arrowleft.append("line")
-            .attr("y1", y(95.5))
+            .attr("y1", y(85))
             .attr("x1", x("Qatar") - arrowlength+(x.bandwidth()*2))
-            .attr("y2", y(95.5) + 5)
+            .attr("y2", y(85) + 5)
             .attr("x2", x("Qatar") - arrowlength+(x.bandwidth()*2) + 8)
             .attr("stroke-width",1)
             .attr("stroke", "#2D2D2D");
@@ -696,8 +697,7 @@ d3.csv("data/data.csv",function(error,men){
             .attr("x2", x("China") + arrowlength)
             .attr("y2", y(95.5))
             .attr("stroke-width", 1)
-            .attr("stroke", "#2D2D2D")
-            .attr('class','desktoplabel');
+            .attr("stroke", "#2D2D2D");
 
         var rightR = arrowright.append("line")
             .attr("y1", y(95.5))
@@ -705,8 +705,7 @@ d3.csv("data/data.csv",function(error,men){
             .attr("y2", y(95.5)+ 5)
             .attr("x2", x("China") +( arrowlength - 8))
             .attr("stroke-width", 1)
-            .attr("stroke", "#2D2D2D")
-            .attr('class','desktoplabel');
+            .attr("stroke", "#2D2D2D");
 
         var leftR = arrowright.append("line")
             .attr("x1", rightR.attr("x1"))
@@ -714,16 +713,15 @@ d3.csv("data/data.csv",function(error,men){
             .attr("x2", rightR.attr("x2"))
             .attr("y2", rightR.attr("y2") - 10)
             .attr("stroke-width", 1)
-            .attr("stroke", "#2D2D2D")
-            .attr('class','desktoplabel');
+            .attr("stroke", "#2D2D2D");
 
         var rightArrowTextshadow = arrowright.append("text")
-                                .attr("class","label-text shadow desktoplabel right-arrow-text")
+                                .attr("class","label-text shadow right-arrow-text")
                                 .text("China")
                                 .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
 
          var rightArrowText = arrowright.append("text")
-                                .attr("class","label-text desktoplabel right-arrow-text")
+                                .attr("class","label-text right-arrow-text")
                                 .text("China")
                                 .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
 
@@ -801,47 +799,45 @@ d3.csv("data/data.csv",function(error,men){
         arrowleft.transition()
                 .style('opacity',1)
 
-        // arrow for Pakistan
-        var arrowleft1 = chart.append("g")
-                            .attr('class','arrowleft arrow a-step')
+        var arrowright = chart.append("g")
+                            .attr('class','arrowright arrow a-step')
                             .style("opacity", 0)
 
-        var labelLine1 = arrowleft1.append("line")
-            .attr("x1", x("Sri Lanka"))
-            .attr("y1", y(89))
-            .attr("x2", x("Sri Lanka") - arrowlength-(x.bandwidth()*2))
-            .attr("y2", y(89))
-            .attr("stroke-width",1)
+        var labelLineR = arrowright.append("line")
+            .attr("x1", (x("Bangladesh") + x.bandwidth()))
+            .attr("y1", y(89.5))
+            .attr("x2", x("Bangladesh") + arrowlength)
+            .attr("y2", y(89.5))
+            .attr("stroke-width", 1)
             .attr("stroke", "#2D2D2D");
 
-        var right1 = arrowleft1.append("line")
-            .attr("y1", y(89))
-            .attr("x1", x("Sri Lanka") - arrowlength-(x.bandwidth()*2))
-            .attr("y2", y(89) + 5)
-            .attr("x2", x("Sri Lanka") - arrowlength-(x.bandwidth()*2) + 8)
-            .attr("stroke-width",1)
+        var rightR = arrowright.append("line")
+            .attr("y1", y(89.5))
+            .attr("x1", x("Bangladesh") + arrowlength)
+            .attr("y2", y(89.5)+ 5)
+            .attr("x2", x("Bangladesh") +( arrowlength - 8))
+            .attr("stroke-width", 1)
             .attr("stroke", "#2D2D2D");
 
-        var left1 = arrowleft1.append("line")
-            .attr("x1", right1.attr("x1"))
-            .attr("y1", right1.attr("y1"))
-            .attr("x2", right1.attr("x2"))
-            .attr("y2", right1.attr("y2")-10)
-            .attr("stroke-width",1)
+        var leftR = arrowright.append("line")
+            .attr("x1", rightR.attr("x1"))
+            .attr("y1", rightR.attr("y1"))
+            .attr("x2", rightR.attr("x2"))
+            .attr("y2", rightR.attr("y2") - 10)
+            .attr("stroke-width", 1)
             .attr("stroke", "#2D2D2D");
 
-        var leftArrowtextshadow1 = arrowleft1.append("text")
-                                .attr("class","label-text shadow left-arrow-text")
-                                .text("Sri Lanka")
-                                .attr('transform','translate('+ (labelLine1.attr("x2")-60) +","+ (parseInt(labelLine1.attr("y1"))+5) +")")
-        var leftArrowtext1 = arrowleft1.append("text")
-                                .attr("class","label-text left-arrow-text")
-                                .text("Sri Lanka")
-                                .attr('transform','translate('+ (labelLine1.attr("x2")-60) +","+ (parseInt(labelLine1.attr("y1"))+5) +")")
+        var rightArrowTextshadow = arrowright.append("text")
+                                .attr("class","label-text shadow right-arrow-text")
+                                .text("Bangladesh")
+                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
 
-            arrowleft1.transition()
-                        .style('opacity',1)
-                        .duration(1000)
+         var rightArrowText = arrowright.append("text")
+                                .attr("class","label-text right-arrow-text")
+                                .text("Bangladesh")
+                                .attr('transform','translate('+ (parseInt(labelLineR.attr("x2"))+10) +","+ (parseInt(labelLineR.attr("y1"))+5) +")")
+         arrowright.transition()
+                .style('opacity',1)
     }
 
     // Slide 8
@@ -1073,25 +1069,15 @@ d3.csv("data/data.csv",function(error,men){
                         .attr("x2", box.width)
 
         refline.append('text')
-                .attr('class','desktoplabel label-text shadow')
+                .attr('class','label-text shadow')
                 .text('India')
-                .attr('transform','translate('+ (box.width-150) +","+ y(val-0.5) +")")
+                .attr('transform','translate('+ (box.width-140) +","+ y(val-0.5) +")")
 
         refline.append('text')
-                .attr('class','desktoplabel label-text')
+                .attr('class','label-text')
                 .text('India')
-                .attr('transform','translate('+ (box.width-150) +","+ y(val-0.5) +")")
+                .attr('transform','translate('+ (box.width-140) +","+ y(val-0.5) +")")
 
-        var refval = parseFloat(val)+0.2
-        refline.append('text')
-                .attr('class','mobilelabel label-text shadow')
-                .text('India')
-                .attr('transform','translate('+ (-25) +","+ y(refval) +")")
-
-        refline.append('text')
-                .attr('class','mobilelabel label-text')
-                .text('India')
-                .attr('transform','translate('+ (-25) +","+ y(refval) +")")
 
     }
 
@@ -1139,6 +1125,7 @@ d3.csv("data/data.csv",function(error,men){
                 .duration(300)
                 setTimeout(function(){$('.stepper-container .text').html(steps[pos-1].narrative)},450)
             }
+            console.log(pos)
             $('.steps').width((100/steps.length)*pos+"%")
     }
 
