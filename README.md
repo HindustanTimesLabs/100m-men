@@ -2,7 +2,7 @@
 
 This is front-end code and data for [Every country's fastest man in one race.](http://www.hindustantimes.com/static/olympics/every-country-fastest-man-in-one-race-100m/)
 
-This project uses d3 v4.
+This project uses d3 v4 and webpack.
 
 ----
 
@@ -18,6 +18,9 @@ Get latest version of code
 ```
 git pull
 ```
+
+If you are cloning for the first time, run `npm install`. That will download your dependencies.
+
 Launch the dev environment
 ```
 npm run dev
