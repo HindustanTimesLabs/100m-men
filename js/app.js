@@ -25,6 +25,7 @@ $(window).scroll(function() {
 
 var share = '<p>And in that miniscule amount of time lies Usain Bolt’s glory.</p><a href="https://www.facebook.com/sharer/sharer.php?u=http://www.hindustantimes.com/static/olympics/every-country-fastest-man-in-one-race-100m" target="_blank"><div class = "share fb"><i class="fa fa-facebook social-button" aria-hidden="true"></i> Share</div></a><a href = "http://twitter.com/intent/tweet?url=http://www.hindustantimes.com/static/olympics/every-country-fastest-man-in-one-race-100m&text=Every country\'s fastest man in one race" target="_blank"><div class = "share tw"><i class="fa fa-twitter social-button" aria-hidden="true"></i> Tweet</div></a>'
 
+// array with steps and text for copy
 var steps = [
     {
         'highlight':'Jamaica',
